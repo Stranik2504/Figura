@@ -524,6 +524,11 @@ public class BlockbenchModelParser {
 
                 //parse keyframes
                 JsonObject animationData = entry.getValue().getAsJsonObject();
+
+                // Skip animators without keyframes
+                if (!animationData.has("keyframes"))
+                    continue;
+
                 for (JsonElement keyframeJson : animationData.get("keyframes").getAsJsonArray()) {
                     BlockbenchModel.KeyFrame keyFrame = GSON.fromJson(keyframeJson, BlockbenchModel.KeyFrame.class);
 
