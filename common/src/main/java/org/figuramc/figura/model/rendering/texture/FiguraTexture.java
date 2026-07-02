@@ -167,6 +167,7 @@ public class FiguraTexture extends SimpleTexture {
     }
 
     public NativeImage copy() {
+        if (nativeImageTexture == null) return null;
         NativeImage image = new NativeImage(nativeImageTexture.format(), nativeImageTexture.getWidth(), nativeImageTexture.getHeight(), true);
         image.copyFrom(nativeImageTexture);
         return image;

@@ -3,17 +3,17 @@
   "id": "figura",
   "version": "${version}",
 
-  "name": "Figura",
+  "name": "NoFigura",
   "description": "Extensive customization of the Player model",
   "authors": [
     "skyrina", "lumelia", "UnlikePaladin", "omoflop"
   ],
   "contributors": [
-    "TooManyLimits", "Lexize", "KitCat962", "Manuel-3", "superpowers04", "auriafoxgirl", "applejuiceyy"
+    "TooManyLimits", "Lexize", "KitCat962", "Manuel-3", "superpowers04", "auriafoxgirl", "applejuiceyy", "Stranik2504"
   ],
   "contact": {
-    "homepage": "https://github.com/FiguraMC/Figura",
-    "issues": "https://github.com/FiguraMC/Figura/issues"
+    "homepage": "https://github.com/Stranik2504/NoFigura",
+    "issues": "https://github.com/Stranik2504/NoFigura/issues"
   },
 
   "license": "Polyform-Noncommercial-1.0.0",
@@ -50,7 +50,7 @@
         "Ko-fi": "https://ko-fi.com/skyrina",
         "Open Collective": "https://opencollective.com/figura",
         "Modrinth":  "https://modrinth.com/mod/figura/",
-        "GitHub":  "https://github.com/FiguraMC/Figura"
+        "GitHub":  "https://github.com/Stranik2504/NoFigura"
       }
     }
   }
