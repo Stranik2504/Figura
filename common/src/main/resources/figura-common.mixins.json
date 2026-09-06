@@ -30,6 +30,8 @@
     "SNIHelperMixin",
     "TextDisplayMixin",
     "compat.SimpleVCMixin",
+    "compat.GeckolibGeoArmorRendererMixin",
+    "compat.GeckolibGeoRendererMixin",
     "font.BakedSheetGlyphMixin",
     "font.BitmapGlyphMixin",
     "font.FontAccessor",
