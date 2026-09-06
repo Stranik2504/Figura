@@ -1,4 +1,5 @@
 plugins {
+    id "dev.architectury.loom"
     id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
@@ -20,11 +21,6 @@ configurations {
 }
 
 dependencies {
-    mappings loom.layered {
-        mappings("org.quiltmc:quilt-mappings:$minecraft_version+build.$mappings:intermediary-v2")
-        officialMojangMappings()
-    }
-
     // Libraries
     include(implementation("com.github.FiguraMC.luaj:luaj-core:$luaj-figura"))
     include(implementation("com.github.FiguraMC.luaj:luaj-jse:$luaj-figura"))
@@ -32,40 +28,40 @@ dependencies {
     include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.3.6")))
 
     if(rootProject.run_on_quilt == "false") {
-        modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+        implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
         // Fabric API
-        //modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_api"
-        include(modImplementation(fabricApi.module("fabric-api-base", rootProject.fabric_api)))
-        include(modImplementation(fabricApi.module("fabric-command-api-v2", rootProject.fabric_api)))
-        include(modImplementation(fabricApi.module("fabric-key-binding-api-v1", rootProject.fabric_api)))
-        include(modImplementation(fabricApi.module("fabric-resource-loader-v0", rootProject.fabric_api)))
+        implementation "net.fabricmc.fabric-api:fabric-api:$fabric_api"
+        include(implementation(fabricApi.module("fabric-api-base", rootProject.fabric_api)))
+        include(implementation(fabricApi.module("fabric-command-api-v2", rootProject.fabric_api)))
+        include(runtimeOnly(fabricApi.module("fabric-key-mapping-api-v1", rootProject.fabric_api)))
+        include(implementation(fabricApi.module("fabric-resource-loader-v0", rootProject.fabric_api)))
     }
     else {
-        modImplementation "org.quiltmc:quilt-loader:${rootProject.quilt_loader_version}"
-        modApi "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${rootProject.quilt_fabric_api_version}"
+        implementation "org.quiltmc:quilt-loader:${rootProject.quilt_loader_version}"
+        api "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${rootProject.quilt_fabric_api_version}"
 
         //here for compile purposes
-        modCompileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+        compileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
-        include(modCompileOnly(fabricApi.module("fabric-api-base", rootProject.fabric_api)))
-        include(modCompileOnly(fabricApi.module("fabric-command-api-v2", rootProject.fabric_api)))
-        include(modCompileOnly(fabricApi.module("fabric-key-binding-api-v1", rootProject.fabric_api)))
-        include(modCompileOnly(fabricApi.module("fabric-resource-loader-v0", rootProject.fabric_api)))
+        include(compileOnly(fabricApi.module("fabric-api-base", rootProject.fabric_api)))
+        include(compileOnly(fabricApi.module("fabric-command-api-v2", rootProject.fabric_api)))
+        include(compileOnly(fabricApi.module("fabric-key-mapping-api-v1", rootProject.fabric_api)))
+        include(compileOnly(fabricApi.module("fabric-resource-loader-v0", rootProject.fabric_api)))
     }
     // Mods
     if (rootProject.run_with_modmenu == "true") {
-        modRuntimeOnly(fabricApi.module("fabric-screen-api-v1", rootProject.fabric_api))
-        modRuntimeOnly(fabricApi.module("fabric-lifecycle-events-v1", rootProject.fabric_api))
-        modImplementation("maven.modrinth:modmenu:$modmenu")
+        runtimeOnly(fabricApi.module("fabric-screen-api-v1", rootProject.fabric_api))
+        runtimeOnly(fabricApi.module("fabric-lifecycle-events-v1", rootProject.fabric_api))
+        implementation("maven.modrinth:modmenu:$modmenu")
     } else {
-        modCompileOnly("maven.modrinth:modmenu:$modmenu")
+        compileOnly("maven.modrinth:modmenu:$modmenu")
     }
     if (rootProject.run_with_geckolib == "true")
-        modRuntimeOnly("software.bernie.geckolib:geckolib-fabric-$geckolib_version")
+        runtimeOnly("software.bernie.geckolib:geckolib-fabric-$geckolib_version")
 
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }
 
@@ -92,13 +88,6 @@ shadowJar {
     archiveClassifier.set "dev-shadow"
 }
 
-remapJar {
-    injectAccessWidener = true
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveClassifier.set "fabric-mc"
-}
-
 jar {
     from("LICENSE") {
         rename { String.valueOf("$archives_base_name").toUpperCase() + "_${it}"}
@@ -122,8 +111,8 @@ publishing {
         maven(MavenPublication) {
             artifactId = "${project.archivesBaseName}-${project.name}"
             version = project.version
-            artifact(remapJar) {
-                builtBy remapJar
+            artifact(jar) {
+                builtBy jar
                 classifier ''
             }
             artifact(sourcesJar) {

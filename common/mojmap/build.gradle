@@ -8,7 +8,7 @@ evaluationDependsOn ':common'
 
 dependencies {
 	minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-	mappings loom.officialMojangMappings()
+	// mappings loom.officialMojangMappings()
 
 	// Libraries
 	implementation("com.github.FiguraMC.luaj:luaj-core:$luaj-figura")
@@ -18,9 +18,9 @@ dependencies {
 
 task mojmapJar(type: RemapJarTask) {
 	classpath.from loom.getMinecraftJarsCollection(MappingsNamespace.INTERMEDIARY)
-	dependsOn project(':common').remapJar
+	dependsOn project(':common').jar
 	
-	inputFile = project(':common').remapJar.archiveFile
+	inputFile = project(':common').jar.archiveFile
 	sourceNamespace = 'intermediary'
 	targetNamespace = 'named'
 	

@@ -1,5 +1,7 @@
 package org.figuramc.figura.mixin.compat;
 
+// TODO: uncomment on version != 26.1.1
+/*
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
@@ -25,8 +27,7 @@ import software.bernie.geckolib.renderer.base.RenderPassInfo;
 
 import java.util.Optional;
 
-//TODO :FIX THIS
-@Pseudo
+ @Pseudo
 @Mixin(value = GeoRenderer.class, remap = false)
 public interface GeckolibGeoRendererMixin<R extends GeoRenderState> {
     @Inject(method = "submitRenderTasks", at = @At("HEAD"), cancellable = true)
@@ -149,3 +150,4 @@ public interface GeckolibGeoRendererMixin<R extends GeoRenderState> {
         stack.mulPose(Axis.YP.rotationDegrees(180f));
     }
 }
+*/

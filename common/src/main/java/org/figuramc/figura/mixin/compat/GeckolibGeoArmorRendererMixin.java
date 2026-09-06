@@ -1,5 +1,7 @@
 package org.figuramc.figura.mixin.compat;
 
+// TODO: uncomment on version != 26.1.1
+/*
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -33,4 +35,4 @@ public abstract class GeckolibGeoArmorRendererMixin<T extends Item & GeoItem> im
     public Avatar figura$getAvatar() {
         return figura$avatar;
     }
-}
+}*/
