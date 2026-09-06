@@ -23,10 +23,9 @@ dependencies {
     implementation("com.neovisionaries:nv-websocket-client:$nv_websocket")
 
     // Mods
-    // TODO: uncomment on version != 26.1.1
-    /*compileOnly ("software.bernie.geckolib:geckolib-fabric-$geckolib_version") {
+    compileOnly ("com.geckolib:geckolib-fabric-$geckolib_version") {
         exclude group: "net.fabricmc"
-    }*/
+    }
 
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.6"))
 

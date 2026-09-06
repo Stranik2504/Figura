@@ -1,7 +1,5 @@
 package org.figuramc.figura.mixin.compat;
 
-// TODO: uncomment on version != 26.1.1
-/*
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
@@ -19,11 +17,12 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import software.bernie.geckolib.cache.model.GeoBone;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
-import software.bernie.geckolib.renderer.base.GeoRenderState;
-import software.bernie.geckolib.renderer.base.GeoRenderer;
-import software.bernie.geckolib.renderer.base.RenderPassInfo;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.renderer.GeoArmorRenderer;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.renderer.base.GeoRenderer;
+import com.geckolib.renderer.base.RenderPassInfo;
+import com.geckolib.constant.DataTickets;
 
 import java.util.Optional;
 
@@ -49,27 +48,30 @@ public interface GeckolibGeoRendererMixin<R extends GeoRenderState> {
         if (avatar.permissions.get(Permissions.VANILLA_MODEL_EDIT) < 1) return;
 
         R renderState = renderPassInfo.renderState();
-        EquipmentSlot slot = renderState.getGeckolibData(software.bernie.geckolib.constant.DataTickets.EQUIPMENT_SLOT);
+        var slot = renderState.getGeckolibData(DataTickets.EQUIPMENT_BY_SLOT);
         if (slot == null) return;
 
-        switch (slot) {
-            case HEAD:
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.HelmetPivot, GeoArmorRenderer.ArmorSegment.HEAD, renderType);
-                break;
-            case CHEST:
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.ChestplatePivot, GeoArmorRenderer.ArmorSegment.CHEST, renderType);
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.LeftShoulderPivot, GeoArmorRenderer.ArmorSegment.LEFT_ARM, renderType);
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.RightShoulderPivot, GeoArmorRenderer.ArmorSegment.RIGHT_ARM, renderType);
-                break;
-            case LEGS:
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.LeftLeggingPivot, GeoArmorRenderer.ArmorSegment.LEFT_LEG, renderType);
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.RightLeggingPivot, GeoArmorRenderer.ArmorSegment.RIGHT_LEG, renderType);
-                break;
-            case FEET:
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.LeftBootPivot, GeoArmorRenderer.ArmorSegment.LEFT_FOOT, renderType);
-                figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.RightBootPivot, GeoArmorRenderer.ArmorSegment.RIGHT_FOOT, renderType);
-                break;
+        for (var items : slot.entrySet()) {
+            switch (items.getKey()) {
+                case HEAD:
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.HelmetPivot, GeoArmorRenderer.ArmorSegment.HEAD, renderType);
+                    break;
+                case CHEST:
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.ChestplatePivot, GeoArmorRenderer.ArmorSegment.CHEST, renderType);
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.LeftShoulderPivot, GeoArmorRenderer.ArmorSegment.LEFT_ARM, renderType);
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.RightShoulderPivot, GeoArmorRenderer.ArmorSegment.RIGHT_ARM, renderType);
+                    break;
+                case LEGS:
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.LeftLeggingPivot, GeoArmorRenderer.ArmorSegment.LEFT_LEG, renderType);
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.RightLeggingPivot, GeoArmorRenderer.ArmorSegment.RIGHT_LEG, renderType);
+                    break;
+                case FEET:
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.LeftBootPivot, GeoArmorRenderer.ArmorSegment.LEFT_FOOT, renderType);
+                    figura$processSegment(renderPassInfo, renderTasks, armorRenderer, avatar, ParentType.RightBootPivot, GeoArmorRenderer.ArmorSegment.RIGHT_FOOT, renderType);
+                    break;
+            }
         }
+
         ci.cancel();
     }
 
@@ -150,4 +152,3 @@ public interface GeckolibGeoRendererMixin<R extends GeoRenderState> {
         stack.mulPose(Axis.YP.rotationDegrees(180f));
     }
 }
-*/
