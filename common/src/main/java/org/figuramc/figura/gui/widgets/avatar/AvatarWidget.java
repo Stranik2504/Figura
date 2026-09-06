@@ -18,7 +18,7 @@ import org.figuramc.figura.utils.ui.UIHelper;
 
 public class AvatarWidget extends AbstractAvatarWidget {
 
-    public static final Identifier MISSING_ICON = new FiguraIdentifier("textures/gui/unknown_icon.png");
+    public static final Identifier MISSING_ICON = FiguraIdentifier.of("textures/gui/unknown_icon.png");
 
     public AvatarWidget(int depth, int width, LocalAvatarFetcher.AvatarPath avatar, AvatarList parent) {
         super(depth, width, 24, avatar, parent);

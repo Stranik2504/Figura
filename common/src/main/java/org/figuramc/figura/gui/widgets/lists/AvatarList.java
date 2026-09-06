@@ -51,7 +51,7 @@ public class AvatarList extends AbstractList {
         children.add(new Button(
                 x + width / 2 - 46, y + 28,
                 20, 20, 0, 0, 20,
-                new FiguraIdentifier("textures/gui/new_avatar.png"),
+                FiguraIdentifier.of("textures/gui/new_avatar.png"),
                 60, 20,
                 FiguraText.of("gui.wardrobe.new_avatar.tooltip"),
                 button -> Minecraft.getInstance().setScreen(new AvatarWizardScreen(parentScreen)))
@@ -61,7 +61,7 @@ public class AvatarList extends AbstractList {
         children.add(new Button(
                 x + width / 2 - 10, y + 28,
                 20, 20, 0, 0, 20,
-                new FiguraIdentifier("textures/gui/unselect.png"),
+                FiguraIdentifier.of("textures/gui/unselect.png"),
                 60, 20,
                 FiguraText.of("gui.wardrobe.unselect.tooltip"),
                 button -> {
@@ -74,7 +74,7 @@ public class AvatarList extends AbstractList {
         children.add(new Button(
                 x + width / 2 + 26, y + 28,
                 20, 20, 0, 0, 20,
-                new FiguraIdentifier("textures/gui/folder.png"),
+                FiguraIdentifier.of("textures/gui/folder.png"),
                 60, 20,
                 FiguraText.of("gui.wardrobe.folder.tooltip"),
                 button -> Util.getPlatform().openUri(LocalAvatarFetcher.getLocalAvatarDirectory().toUri()))

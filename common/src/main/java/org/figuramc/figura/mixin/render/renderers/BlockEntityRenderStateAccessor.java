@@ -1,4 +1,4 @@
-package org.figuramc.figura.mixin.render;
+package org.figuramc.figura.mixin.render.renderers;
 
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.world.level.block.state.BlockState;

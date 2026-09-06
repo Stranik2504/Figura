@@ -12,6 +12,7 @@ import org.figuramc.figura.gui.FiguraToast;
 import org.figuramc.figura.parsers.AvatarMetadataParser;
 import org.figuramc.figura.parsers.BlockbenchModelParser;
 import org.figuramc.figura.parsers.LuaScriptParser;
+import org.figuramc.figura.utils.FiguraIdentifier;
 import org.figuramc.figura.utils.FiguraResourceListener;
 import org.figuramc.figura.utils.FiguraText;
 import org.figuramc.figura.utils.IOUtils;
@@ -58,7 +59,7 @@ public class LocalAvatarLoader {
             String namespace = split[split.length - 2];
             String path = split[split.length - 1];
             // This is a 4 because .nbt has 4 characters
-            Identifier id = new Identifier(namespace, path.substring(0, path.length() - 4));
+            Identifier id = FiguraIdentifier.of(namespace, path.substring(0, path.length() - 4));
 
             // nbt
             CompoundTag nbt;

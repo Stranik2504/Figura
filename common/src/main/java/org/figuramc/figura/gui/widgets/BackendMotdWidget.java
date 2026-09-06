@@ -61,7 +61,7 @@ public class BackendMotdWidget extends AbstractTextAreaWidget {
         UIHelper.blitSliced(graphics, this.getX() - this.innerPadding(), this.getY() - this.innerPadding(), this.getWidth() + this.totalInnerPadding(), this.getHeight() + this.totalInnerPadding(), UIHelper.OUTLINE_FILL);
     }
 
-    public void renderWidget(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         if (this.visible) {
             if (!scrollable()) {
                 extractBackground(graphics);

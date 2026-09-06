@@ -37,13 +37,13 @@ public class FiguraModClientNeoForge extends FiguraMod {
 
     @SubscribeEvent
     public static void registerResourceListener(AddClientReloadListenersEvent event) {
-        getResourceListeners().forEach(figuraResourceListener -> event.addListener(new Identifier(FiguraMod.MOD_ID, figuraResourceListener.id()), (FiguraResourceListenerImpl)figuraResourceListener));
+        getResourceListeners().forEach(figuraResourceListener -> event.addListener(FiguraIdentifier.of(FiguraMod.MOD_ID, figuraResourceListener.id()), (FiguraResourceListenerImpl)figuraResourceListener));
     }
 
     @SubscribeEvent
     public static void registerOverlays(RegisterGuiLayersEvent event) {
-        event.registerAboveAll(new Identifier(FiguraMod.MOD_ID, "figura_overlay"), new GuiOverlay());
-        event.registerBelowAll(new Identifier(FiguraMod.MOD_ID, "figura_underlay"), new GuiUnderlay());
+        event.registerAboveAll(FiguraIdentifier.of(FiguraMod.MOD_ID, "figura_overlay"), new GuiOverlay());
+        event.registerBelowAll(FiguraIdentifier.of(FiguraMod.MOD_ID, "figura_underlay"), new GuiUnderlay());
     }
 
     private static final List<Identifier> vanillaOverlays = new ArrayList<>();

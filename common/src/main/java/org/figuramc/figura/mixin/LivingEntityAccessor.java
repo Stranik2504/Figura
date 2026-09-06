@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface LivingEntityAccessor {
     @Intrinsic
     @Accessor("jumping")
-    boolean isJumping();
+    boolean figura$isJumping();
 
     @Intrinsic
     @Invoker("getCurrentSwingDuration")

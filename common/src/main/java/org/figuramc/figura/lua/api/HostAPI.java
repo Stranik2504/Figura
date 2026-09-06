@@ -10,7 +10,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.multiplayer.chat.GuiMessageTag;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -600,7 +599,7 @@ public class HostAPI {
     public boolean isJumping() {
         LocalPlayer player = this.minecraft.player;
         if (isHost() && player != null)
-            return ((LivingEntityAccessor) player).isJumping();
+            return ((LivingEntityAccessor) player).figura$isJumping();
         return false;
     }
 

@@ -202,7 +202,7 @@ public abstract class ElytraLayerMixin<T extends LivingEntity, S extends Humanoi
 
         List<EquipmentClientInfo.Layer> list = ((EquipmentLayerRendererAccessor)this.equipmentRenderer).figura$getAssetsManager().get(location.get()).getLayers(layerType);
 
-        int i = DyedItemColor.getOrDefault(itemStack, -6265536);;
+        int i = DyedItemColor.getOrDefault(itemStack, -6265536);
         int order = 0;
 
         for(EquipmentClientInfo.Layer layer : list) {

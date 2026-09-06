@@ -74,11 +74,11 @@ public final class UIHelper {
 
     // -- Variables -- // 
 
-    public static final Identifier OUTLINE_FILL = new FiguraIdentifier("textures/gui/outline_fill.png");
-    public static final Identifier OUTLINE = new FiguraIdentifier("textures/gui/outline.png");
-    public static final Identifier TOOLTIP = new FiguraIdentifier("textures/gui/tooltip.png");
-    public static final Identifier UI_FONT = new FiguraIdentifier("ui");
-    public static final Identifier SPECIAL_FONT = new FiguraIdentifier("special");
+    public static final Identifier OUTLINE_FILL = FiguraIdentifier.of("textures/gui/outline_fill.png");
+    public static final Identifier OUTLINE = FiguraIdentifier.of("textures/gui/outline.png");
+    public static final Identifier TOOLTIP = FiguraIdentifier.of("textures/gui/tooltip.png");
+    public static final Identifier UI_FONT = FiguraIdentifier.of("ui");
+    public static final Identifier SPECIAL_FONT = FiguraIdentifier.of("special");
 
     public static final Component UP_ARROW = Component.literal("^").withStyle(Style.EMPTY.withFont(new FontDescription.Resource(UIHelper.UI_FONT)));
     public static final Component DOWN_ARROW = Component.literal("V").withStyle(Style.EMPTY.withFont(new FontDescription.Resource(UIHelper.UI_FONT)));

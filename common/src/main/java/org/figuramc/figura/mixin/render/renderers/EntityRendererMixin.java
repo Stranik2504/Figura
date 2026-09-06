@@ -115,7 +115,7 @@ public abstract class EntityRendererMixin<T extends Entity, S extends EntityRend
 
             // i literally cannot believe we have to do this, but here we are
             ((CameraRenderStateExtension)replacement).figura$setAvatar(figura$avatar);
-            ((CameraRenderStateExtension)replacement).figura$setRenderingNameTag(figura$isRenderingName());
+            ((CameraRenderStateExtension)replacement).figura$setRenderingNameTag(renderingName);
             return replacement;
         }
         return cameraRenderState;

@@ -13,7 +13,7 @@ public class SliderWidget extends ScrollBarWidget {
 
     // -- fields -- // 
 
-    public static final Identifier SLIDER_TEXTURE = new FiguraIdentifier("textures/gui/slider.png");
+    public static final Identifier SLIDER_TEXTURE = FiguraIdentifier.of("textures/gui/slider.png");
 
     protected final int headHeight = 11;
     protected final int headWidth = 11;

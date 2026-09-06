@@ -272,7 +272,7 @@ public abstract class HumanoidArmorLayerMixinFabric<S extends HumanoidRenderStat
         modelPart.xRot = 0;
         modelPart.yRot = 0;
         modelPart.zRot = 0;
-        EquipmentClientInfo.LayerType layerType = this.usesInnerModel(armorSlot) ? EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS : EquipmentClientInfo.LayerType.HUMANOID;
+        EquipmentClientInfo.LayerType layerType = this.figura$usesInnerModel(armorSlot) ? EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS : EquipmentClientInfo.LayerType.HUMANOID;
         Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
 
         if (equippable == null)

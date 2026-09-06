@@ -14,7 +14,7 @@ import org.figuramc.figura.utils.ui.UIHelper;
 public class Button extends net.minecraft.client.gui.components.Button implements FiguraWidget {
 
     // default textures
-    private static final Identifier TEXTURE = new FiguraIdentifier("textures/gui/button.png");
+    private static final Identifier TEXTURE = FiguraIdentifier.of("textures/gui/button.png");
 
     // texture data
     protected Integer u;

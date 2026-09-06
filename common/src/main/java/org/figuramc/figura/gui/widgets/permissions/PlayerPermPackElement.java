@@ -34,8 +34,8 @@ import java.util.UUID;
 
 public class PlayerPermPackElement extends AbstractPermPackElement {
 
-    public static final Identifier UNKNOWN = new FiguraIdentifier("textures/gui/unknown_portrait.png");
-    private static final Identifier BACKGROUND = new FiguraIdentifier("textures/gui/player_permissions.png");
+    public static final Identifier UNKNOWN = FiguraIdentifier.of("textures/gui/unknown_portrait.png");
+    private static final Identifier BACKGROUND = FiguraIdentifier.of("textures/gui/player_permissions.png");
     private static final Component DC_TEXT = FiguraText.of("gui.permissions.disconnected").withStyle(ChatFormatting.RED);
 
     private final String name;

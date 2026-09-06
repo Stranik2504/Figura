@@ -22,7 +22,7 @@ import org.figuramc.figura.utils.ui.UIHelper;
 
 public class HelpScreen extends AbstractPanelScreen {
 
-    public static final Identifier ICONS = new FiguraIdentifier("textures/gui/help_icons.png");
+    public static final Identifier ICONS = FiguraIdentifier.of("textures/gui/help_icons.png");
     public static final String LUA_VERSION = "5.2 - Figura";
 
     private IconButton kofi;

@@ -16,7 +16,7 @@ import org.joml.Matrix3x2fStack;
 
 public class CategoryPermPackElement extends AbstractPermPackElement {
 
-    private static final Identifier BACKGROUND = new FiguraIdentifier("textures/gui/group_permissions.png");
+    private static final Identifier BACKGROUND = FiguraIdentifier.of("textures/gui/group_permissions.png");
     private boolean enabled;
 
     public CategoryPermPackElement(int width, PermissionPack pack, PlayerList parent) {

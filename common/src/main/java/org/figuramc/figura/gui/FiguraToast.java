@@ -155,10 +155,10 @@ public class FiguraToast implements Toast {
     }
 
     public enum ToastType {
-        DEFAULT(new FiguraIdentifier("textures/gui/toast/default.png"), 4, 160, 31, 0x55FFFF),
-        WARNING(new FiguraIdentifier("textures/gui/toast/warning.png"), 4, 160, 31, 0xFFFF00),
-        ERROR(new FiguraIdentifier("textures/gui/toast/error.png"), 4, 160, 31, 0xFF0000),
-        CHEESE(new FiguraIdentifier("textures/gui/toast/cheese.png"), 1, 160, 31, ColorUtils.Colors.CHEESE.hex);
+        DEFAULT(FiguraIdentifier.of("textures/gui/toast/default.png"), 4, 160, 31, 0x55FFFF),
+        WARNING(FiguraIdentifier.of("textures/gui/toast/warning.png"), 4, 160, 31, 0xFFFF00),
+        ERROR(FiguraIdentifier.of("textures/gui/toast/error.png"), 4, 160, 31, 0xFF0000),
+        CHEESE(FiguraIdentifier.of("textures/gui/toast/cheese.png"), 1, 160, 31, ColorUtils.Colors.CHEESE.hex);
 
         private final Identifier texture;
         private final int frames;

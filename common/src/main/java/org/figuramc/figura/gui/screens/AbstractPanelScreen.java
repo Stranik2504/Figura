@@ -26,9 +26,9 @@ import java.util.List;
 public abstract class AbstractPanelScreen extends Screen {
 
     public static final List<Identifier> BACKGROUNDS = List.of(
-            new FiguraIdentifier("textures/gui/background/background_0.png"),
-            new FiguraIdentifier("textures/gui/background/background_1.png"),
-            new FiguraIdentifier("textures/gui/background/background_2.png")
+            FiguraIdentifier.of("textures/gui/background/background_0.png"),
+            FiguraIdentifier.of("textures/gui/background/background_1.png"),
+            FiguraIdentifier.of("textures/gui/background/background_2.png")
     );
 
     // variables

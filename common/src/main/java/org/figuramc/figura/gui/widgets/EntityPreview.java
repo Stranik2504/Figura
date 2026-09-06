@@ -21,8 +21,8 @@ import org.joml.Vector3f;
 
 public class EntityPreview extends AbstractContainerElement {
 
-    public static final Identifier UNKNOWN = new FiguraIdentifier("textures/gui/unknown_entity.png");
-    public static final Identifier OVERLAY = new FiguraIdentifier("textures/gui/entity_overlay.png");
+    public static final Identifier UNKNOWN = FiguraIdentifier.of("textures/gui/unknown_entity.png");
+    public static final Identifier OVERLAY = FiguraIdentifier.of("textures/gui/entity_overlay.png");
 
     // properties
     private LivingEntity entity;
@@ -64,7 +64,7 @@ public class EntityPreview extends AbstractContainerElement {
         children.add(button = new SwitchButton(
                 x + 4, y + 4, 16, 16,
                 0, 0, 16,
-                new FiguraIdentifier("textures/gui/expand.png"),
+                FiguraIdentifier.of("textures/gui/expand.png"),
                 48, 32,
                 FiguraText.of("gui.expand"),
                 bx -> {

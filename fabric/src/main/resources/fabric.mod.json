@@ -28,6 +28,7 @@
       "org.figuramc.figura.config.fabric.ModMenuConfig"
     ]
   },
+  "accessWidener": "figura.accesswidener",
   "mixins": [
     "figura.mixins.json",
     "figura-common.mixins.json"

@@ -1,7 +1,6 @@
 package org.figuramc.figura.lua.api;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -23,7 +22,6 @@ import org.luaj.vm2.LuaValue;
 
 import com.mojang.datafixers.util.Pair;
 
-import kroppeb.stareval.function.Type.Int;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -145,9 +143,7 @@ public class RaycastAPI {
         Predicate<Entity> entityPredicate = (entity) -> {
             if (fn == null) return true;
             LuaValue result = fn.invoke(this.owner.luaRuntime.typeManager.javaToLua(EntityAPI.wrap(entity))).arg1();
-            if ((result.isboolean() && result.checkboolean() == false) || result.isnil())
-                return false;
-            return true;
+            return (!result.isboolean() || result.checkboolean()) && !result.isnil();
         };
 
         EntityHitResult result = ProjectileUtil.getEntityHitResult(new Marker(EntityType.MARKER, WorldAPI.getCurrentWorld()), start.asVec3(), end.asVec3(), new AABB(start.asVec3(), end.asVec3()), entityPredicate, Double.MAX_VALUE);

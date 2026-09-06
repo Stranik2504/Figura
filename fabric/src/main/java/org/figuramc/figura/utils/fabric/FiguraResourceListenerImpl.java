@@ -18,7 +18,7 @@ public class FiguraResourceListenerImpl extends FiguraResourceListener implement
     }
 
     public Identifier getFabricId() {
-        return new FiguraIdentifier(this.id());
+        return FiguraIdentifier.of(this.id());
     }
 
     @Override

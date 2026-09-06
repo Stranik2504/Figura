@@ -23,7 +23,7 @@ import java.util.function.Function;
 
 public class PanelSelectorWidget extends AbstractContainerElement {
 
-    public static final Identifier BACKGROUND = new FiguraIdentifier("textures/gui/panels_background.png");
+    public static final Identifier BACKGROUND = FiguraIdentifier.of("textures/gui/panels_background.png");
 
     private static final List<Function<Screen, Pair<Screen, PanelIcon>>> PANELS = new ArrayList<>() {{
                 add(s -> Pair.of(new ProfileScreen(s), PanelIcon.PROFILE));
@@ -148,8 +148,8 @@ public class PanelSelectorWidget extends AbstractContainerElement {
 
     private static class PanelButton extends IconButton {
 
-        public static final Identifier TEXTURE = new FiguraIdentifier("textures/gui/panels_button.png");
-        public static final Identifier ICONS = new FiguraIdentifier("textures/gui/panels.png");
+        public static final Identifier TEXTURE = FiguraIdentifier.of("textures/gui/panels_button.png");
+        public static final Identifier ICONS = FiguraIdentifier.of("textures/gui/panels.png");
 
         private final PanelSelectorWidget parent;
 

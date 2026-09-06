@@ -27,7 +27,7 @@ public enum FiguraRenderTypes {
     NONE(null),
 
     CUTOUT(RenderTypes::entityCutout),
-    CUTOUT_CULL(RenderTypes::entityCutout),
+    CUTOUT_CULL(RenderTypes::entityCutoutCull),
     CUTOUT_EMISSIVE_SOLID(resourceLocation -> FiguraRenderType.CUTOUT_EMISSIVE_SOLID.apply(resourceLocation, true)),
 
     TRANSLUCENT(RenderTypes::entityTranslucent),
@@ -140,7 +140,7 @@ public enum FiguraRenderTypes {
         );
     }
 
-    public static class FiguraRenderPipelines extends RenderPipelines {
-        public static RenderPipeline FIGURA_SOLID = RenderPipelines.ENTITY_SOLID;
+    public static class FiguraRenderPipelines {
+        public static final RenderPipeline FIGURA_SOLID = RenderPipelines.ENTITY_SOLID;
     }
 }

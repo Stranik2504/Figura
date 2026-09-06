@@ -16,6 +16,7 @@ import org.figuramc.figura.math.matrix.FiguraMat4;
 import org.figuramc.figura.math.vector.FiguraVec2;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.math.vector.FiguraVec4;
+import org.figuramc.figura.utils.FiguraIdentifier;
 import org.figuramc.figura.utils.LuaUtils;
 import org.luaj.vm2.LuaError;
 
@@ -560,7 +561,7 @@ public class RendererAPI {
 
         fireLayer1 = LuaUtils.parsePath(id);
         if (fireLayer1.getPath().startsWith("textures/"))
-            fireLayer1 = new Identifier(fireLayer1.getNamespace(), fireLayer1.getPath().substring("textures/".length()));
+            fireLayer1 = FiguraIdentifier.of(fireLayer1.getNamespace(), fireLayer1.getPath().substring("textures/".length()));
 
         return this;
     }
@@ -582,7 +583,7 @@ public class RendererAPI {
 
         fireLayer2 = LuaUtils.parsePath(id);
         if (fireLayer2.getPath().startsWith("textures/"))
-            fireLayer2 = new Identifier(fireLayer2.getNamespace(), fireLayer2.getPath().substring("textures/".length()));
+            fireLayer2 = FiguraIdentifier.of(fireLayer2.getNamespace(), fireLayer2.getPath().substring("textures/".length()));
 
         return this;
     }

@@ -5,10 +5,16 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.FiguraMod;
 
-public class FiguraIdentifier extends Identifier {
+public final class FiguraIdentifier {
+    private FiguraIdentifier() {
+    }
 
-    public FiguraIdentifier(String string) {
-        super(FiguraMod.MOD_ID, string);
+    public static Identifier of(String path) {
+        return Identifier.fromNamespaceAndPath(FiguraMod.MOD_ID, formatPath(path));
+    }
+
+    public static Identifier of(String namespace, String path) {
+        return Identifier.fromNamespaceAndPath(namespace, formatPath(path));
     }
 
     public static String formatPath(String path) {

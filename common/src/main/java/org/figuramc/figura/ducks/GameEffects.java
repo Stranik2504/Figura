@@ -9,5 +9,10 @@ public interface GameEffects {
         return EFFECTS;
     }
 
-    Identifier[] EFFECTS = new Identifier[]{Identifier.parse("shaders/post/blur.json"), Identifier.parse("shaders/post/entity_outline.json"), Identifier.parse("shaders/post/invert.json"), Identifier.parse("shaders/post/blur.json"), Identifier.parse("shaders/post/creeper.json"), Identifier.parse("shaders/post/spider.json")};
+    Identifier[] EFFECTS = new Identifier[]{
+            Identifier.parse("shaders/post/blur.json"),
+            Identifier.parse("shaders/post/entity_outline.json"), Identifier.parse("shaders/post/invert.json"),
+            Identifier.parse("shaders/post/blur.json"), Identifier.parse("shaders/post/creeper.json"),
+            Identifier.parse("shaders/post/spider.json")
+    };
 }

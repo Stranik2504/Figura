@@ -30,7 +30,7 @@ public class PauseScreenMixin extends Screen {
     }
 
     @Unique
-    private static final Identifier FIGURA_ICON = new FiguraIdentifier("textures/gui/icon.png");
+    private static final Identifier FIGURA_ICON = FiguraIdentifier.of("textures/gui/icon.png");
 
     @Unique
     private LayoutElement lanButton;

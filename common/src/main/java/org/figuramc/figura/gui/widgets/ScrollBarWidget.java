@@ -19,7 +19,7 @@ public class ScrollBarWidget extends AbstractWidget implements FiguraWidget {
 
     // -- fields -- // 
 
-    public static final Identifier SCROLLBAR_TEXTURE = new FiguraIdentifier("textures/gui/scrollbar.png");
+    public static final Identifier SCROLLBAR_TEXTURE = FiguraIdentifier.of("textures/gui/scrollbar.png");
 
     protected final int headHeight = 20;
     protected final int headWidth = 10;

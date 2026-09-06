@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class SearchBar extends TextField {
 
-    public static final Identifier CLEAR_TEXTURE = new FiguraIdentifier("textures/gui/search_clear.png");
+    public static final Identifier CLEAR_TEXTURE = FiguraIdentifier.of("textures/gui/search_clear.png");
     public static final Component SEARCH_ICON = Component.literal("\uD83D\uDD0E").withStyle(Style.EMPTY.withFont(new FontDescription.Resource(UIHelper.UI_FONT)).applyFormats(ChatFormatting.DARK_GRAY));
 
     private final Button clearButton;

@@ -14,7 +14,7 @@ import org.figuramc.figura.utils.ui.UIHelper;
 
 public class SwitchButton extends Button {
 
-    public static final Identifier SWITCH_TEXTURE = new FiguraIdentifier("textures/gui/switch.png");
+    public static final Identifier SWITCH_TEXTURE = FiguraIdentifier.of("textures/gui/switch.png");
     public static final Component ON = FiguraText.of("gui.on");
     public static final Component OFF = FiguraText.of("gui.off");
 

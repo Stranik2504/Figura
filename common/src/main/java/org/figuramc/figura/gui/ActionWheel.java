@@ -35,8 +35,8 @@ import java.util.function.Function;
 
 public class ActionWheel {
 
-    private static final Identifier TEXTURE = new FiguraIdentifier("textures/gui/action_wheel.png");
-    private static final Identifier ICONS = new FiguraIdentifier("textures/gui/action_wheel_icons.png");
+    private static final Identifier TEXTURE = FiguraIdentifier.of("textures/gui/action_wheel.png");
+    private static final Identifier ICONS = FiguraIdentifier.of("textures/gui/action_wheel_icons.png");
     private static final double DISTANCE = 41;
     private static final double DEADZONE = 19;
 
