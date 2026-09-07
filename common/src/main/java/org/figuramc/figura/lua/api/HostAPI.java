@@ -114,7 +114,7 @@ public class HostAPI {
     public HostAPI setTitleTimes(Object x, Double y, Double z) {
         if (!isHost()) return this;
         FiguraVec3 times = LuaUtils.parseVec3("setTitleTimes", x, y, z);
-        this.minecraft.gui.setTimes((int) times.x, (int) times.y, (int) times.z);
+        this.minecraft.gui.hud.setTimes((int) times.x, (int) times.y, (int) times.z);
         return this;
     }
 
@@ -127,7 +127,7 @@ public class HostAPI {
     @LuaMethodDoc("host.clear_title")
     public HostAPI clearTitle() {
         if (isHost())
-            this.minecraft.gui.clearTitles();
+            this.minecraft.gui.hud.clearTitles();
         return this;
     }
 
@@ -142,7 +142,7 @@ public class HostAPI {
     )
     public HostAPI setTitle(@LuaNotNil String text) {
         if (isHost())
-            this.minecraft.gui.setTitle(TextUtils.tryParseJson(text));
+            this.minecraft.gui.hud.setTitle(TextUtils.tryParseJson(text));
         return this;
     }
 
@@ -162,7 +162,7 @@ public class HostAPI {
     )
     public HostAPI setSubtitle(@LuaNotNil String text) {
         if (isHost())
-            this.minecraft.gui.setSubtitle(TextUtils.tryParseJson(text));
+            this.minecraft.gui.hud.setSubtitle(TextUtils.tryParseJson(text));
         return this;
     }
 
@@ -188,7 +188,7 @@ public class HostAPI {
     )
     public HostAPI setActionbar(@LuaNotNil String text, boolean animated) {
         if (isHost())
-            this.minecraft.gui.setOverlayMessage(TextUtils.tryParseJson(text), animated);
+            this.minecraft.gui.hud.setOverlayMessage(TextUtils.tryParseJson(text), animated);
         return this;
     }
 
@@ -237,7 +237,7 @@ public class HostAPI {
     )
     public HostAPI appendChatHistory(@LuaNotNil String message) {
         if (isHost())
-            this.minecraft.gui.getChat().addRecentChat(message);
+            this.minecraft.gui.hud.getChat().addRecentChat(message);
         return this;
     }
 
@@ -254,7 +254,7 @@ public class HostAPI {
             return null;
 
         index--;
-        List<GuiMessage> messages = ((ChatComponentAccessor) this.minecraft.gui.getChat()).getAllMessages();
+        List<GuiMessage> messages = ((ChatComponentAccessor) this.minecraft.gui.hud.getChat()).getAllMessages();
         if (index < 0 || index >= messages.size())
             return null;
 
@@ -292,7 +292,7 @@ public class HostAPI {
         if (!isHost()) return this;
 
         index--;
-        List<GuiMessage> messages = ((ChatComponentAccessor) this.minecraft.gui.getChat()).getAllMessages();
+        List<GuiMessage> messages = ((ChatComponentAccessor) this.minecraft.gui.hud.getChat()).getAllMessages();
         if (index < 0 || index >= messages.size())
             return this;
 
@@ -300,12 +300,12 @@ public class HostAPI {
             messages.remove(index);
         else {
             GuiMessage old = messages.get(index);
-            GuiMessage neww = new GuiMessage(this.minecraft.gui.getGuiTicks(), TextUtils.tryParseJson(newMessage), null, old.source(), GuiMessageTag.chatModified(old.content().getString()));
+            GuiMessage neww = new GuiMessage(this.minecraft.gui.hud.getGuiTicks(), TextUtils.tryParseJson(newMessage), null, old.source(), GuiMessageTag.chatModified(old.content().getString()));
             messages.set(index, neww);
             ((GuiMessageAccessor) (Object) neww).figura$setColor(backgroundColor != null ? ColorUtils.rgbToInt(backgroundColor) : ((GuiMessageAccessor) (Object) old).figura$getColor());
         }
 
-        this.minecraft.gui.getChat().rescaleChat();
+        this.minecraft.gui.hud.getChat().rescaleChat();
         return this;
     }
 
@@ -428,7 +428,7 @@ public class HostAPI {
     @LuaWhitelist
     @LuaMethodDoc("host.get_chat_text")
     public String getChatText() {
-        if (isHost() && this.minecraft.screen instanceof ChatScreen chat)
+        if (isHost() && this.minecraft.gui.screen() instanceof ChatScreen chat)
             return ((ChatScreenAccessor) chat).getInput().getValue();
 
         return null;
@@ -444,7 +444,7 @@ public class HostAPI {
             value = "host.set_chat_text"
     )
     public HostAPI setChatText(@LuaNotNil String text) {
-        if (isHost() && Configs.CHAT_MESSAGES.value && this.minecraft.screen instanceof ChatScreen chat)
+        if (isHost() && Configs.CHAT_MESSAGES.value && this.minecraft.gui.screen() instanceof ChatScreen chat)
             ((ChatScreenAccessor) chat).getInput().setValue(text);
         return this;
     }
@@ -457,15 +457,15 @@ public class HostAPI {
     @LuaWhitelist
     @LuaMethodDoc("host.get_screen")
     public String getScreen() {
-        if (!isHost() || this.minecraft.screen == null)
+        if (!isHost() || this.minecraft.gui.screen() == null)
             return null;
-        return this.minecraft.screen.getClass().getName();
+        return this.minecraft.gui.screen().getClass().getName();
     }
 
     @LuaWhitelist
     @LuaMethodDoc("host.get_screen_slot_count")
     public Integer getScreenSlotCount() {
-        if (isHost() && this.minecraft.screen instanceof AbstractContainerScreen<?> screen)
+        if (isHost() && this.minecraft.gui.screen() instanceof AbstractContainerScreen<?> screen)
             return screen.getMenu().slots.size();
         return null;
     }
@@ -476,7 +476,7 @@ public class HostAPI {
             @LuaMethodOverload(argumentTypes = Integer.class, argumentNames = "slot")
     }, value = "host.get_screen_slot")
     public ItemStackAPI getScreenSlot(@LuaNotNil Object slot) {
-        if (!isHost() || !(this.minecraft.screen instanceof AbstractContainerScreen<?> screen))
+        if (!isHost() || !(this.minecraft.gui.screen() instanceof AbstractContainerScreen<?> screen))
             return null;
 
         NonNullList<Slot> slots = screen.getMenu().slots;
@@ -489,13 +489,13 @@ public class HostAPI {
     @LuaWhitelist
     @LuaMethodDoc("host.is_chat_open")
     public boolean isChatOpen() {
-        return isHost() && this.minecraft.screen instanceof ChatScreen;
+        return isHost() && this.minecraft.gui.screen() instanceof ChatScreen;
     }
 
     @LuaWhitelist
     @LuaMethodDoc("host.is_container_open")
     public boolean isContainerOpen() {
-        return isHost() && this.minecraft.screen instanceof AbstractContainerScreen;
+        return isHost() && this.minecraft.gui.screen() instanceof AbstractContainerScreen;
     }
 
     @LuaWhitelist
@@ -510,7 +510,7 @@ public class HostAPI {
             return null;
 
         // manually recreate screenshot logic to get around the main thread screenshot saving
-        RenderTarget renderTarget = this.minecraft.getMainRenderTarget();
+        RenderTarget renderTarget = this.minecraft.gameRenderer.mainRenderTarget();
         GpuTexture gpuTexture = renderTarget.getColorTexture();
         int width = renderTarget.width;
         int height = renderTarget.height;

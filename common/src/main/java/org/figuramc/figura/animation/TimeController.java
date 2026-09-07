@@ -2,9 +2,7 @@ package org.figuramc.figura.animation;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Util;
-import net.minecraft.world.TickRateManager;
-import net.minecraft.world.level.Level;
-import org.figuramc.figura.mixin.MinecraftAccesor;
+import org.figuramc.figura.mixin.MinecraftAccessor;
 
 public class TimeController {
 
@@ -37,6 +35,6 @@ public class TimeController {
 
     // This one is tricky, we get the tick target miliseconds and use the value vanilla's timer has on msPerTick which is 50, then divide by the original value it used to get that (1000/20), so 20
     public float getDiff() {
-        return Minecraft.getInstance().isPaused() ? 0 : ((time - lastTime) / ((MinecraftAccesor)Minecraft.getInstance()).figura$invokeGetTickTargetMillis(50.0f))/ 20.0f;
+        return Minecraft.getInstance().isPaused() ? 0 : ((time - lastTime) / ((MinecraftAccessor)Minecraft.getInstance()).figura$invokeGetTickTargetMillis(50.0f))/ 20.0f;
     }
 }

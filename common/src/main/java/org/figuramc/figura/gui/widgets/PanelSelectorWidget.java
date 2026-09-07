@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.FiguraMod;
-import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.entries.FiguraScreen;
 import org.figuramc.figura.gui.screens.*;
 import org.figuramc.figura.utils.FiguraIdentifier;

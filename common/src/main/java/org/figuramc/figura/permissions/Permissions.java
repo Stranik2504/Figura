@@ -3,6 +3,7 @@ package org.figuramc.figura.permissions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import org.figuramc.figura.utils.ColorUtils;
 import org.figuramc.figura.utils.FiguraText;
 
@@ -136,7 +137,7 @@ public class Permissions {
         }
 
         Category(int index, ChatFormatting formatting) {
-            this(index, formatting.getColor(), Style.EMPTY.applyFormat(formatting));
+            this(index, TextColor.fromLegacyFormat(formatting).getValue(), Style.EMPTY.applyFormat(formatting));
         }
 
         Category(int index, int color, Style style) {

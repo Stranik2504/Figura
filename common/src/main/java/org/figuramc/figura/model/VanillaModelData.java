@@ -2,7 +2,6 @@ package org.figuramc.figura.model;
 
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import org.figuramc.figura.math.vector.FiguraVec3;
 
 import java.util.HashMap;

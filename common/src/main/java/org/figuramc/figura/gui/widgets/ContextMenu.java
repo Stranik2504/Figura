@@ -10,6 +10,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.utils.FiguraIdentifier;
 import org.figuramc.figura.utils.ui.UIHelper;
@@ -227,7 +228,7 @@ public class ContextMenu extends AbstractContainerElement {
         @Override
         public void extractContents(GuiGraphicsExtractor gui, int mouseX, int mouseY, float delta) {
             // draw line
-            gui.fill(this.getX() + 4, getY() + 4, this.getX() + this.getWidth() - 4, getY() + 5, 0xFF000000 + ChatFormatting.DARK_GRAY.getColor());
+            gui.fill(this.getX() + 4, getY() + 4, this.getX() + this.getWidth() - 4, getY() + 5, 0xFF000000 + TextColor.DARK_GRAY.getValue());
         }
 
         @Override

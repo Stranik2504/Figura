@@ -1,7 +1,6 @@
 package org.figuramc.figura.model.rendering.texture;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.AddressMode;
@@ -40,7 +39,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.Base64;
-import java.util.Objects;
 import java.util.UUID;
 
 @LuaWhitelist

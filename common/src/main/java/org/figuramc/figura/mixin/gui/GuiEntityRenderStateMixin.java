@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = GuiEntityRenderState.class)
 public abstract class GuiEntityRenderStateMixin implements GuiEntityRenderStateExtension {
-
     @Unique
     double figura$xPos = 0, figura$yPos = 0;
 

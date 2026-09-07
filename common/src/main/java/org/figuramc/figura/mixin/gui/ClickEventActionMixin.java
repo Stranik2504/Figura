@@ -5,7 +5,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
 import org.figuramc.figura.gui.FiguraFunctionClickEvent;
 import org.figuramc.figura.utils.TextUtils;
@@ -20,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 
 @Mixin(ClickEvent.Action.class)
 public class ClickEventActionMixin {

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Mixin(PlayerTabOverlay.class)
 public interface PlayerTabOverlayAccessor {
-
     @Intrinsic
     @Accessor("header")
     Component getHeader();

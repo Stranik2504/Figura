@@ -4,7 +4,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.config.ConfigType;
-import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.gui.widgets.ParentedButton;
 import org.figuramc.figura.gui.widgets.SwitchButton;
 import org.figuramc.figura.gui.widgets.lists.ConfigList;

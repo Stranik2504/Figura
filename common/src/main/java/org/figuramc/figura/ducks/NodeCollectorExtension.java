@@ -8,7 +8,6 @@ import org.figuramc.figura.model.rendering.nodeRenderer.FiguraSubmission;
 
 import java.util.List;
 
-
 @FunctionalInterface
 interface QuadFunction<A, B, C, D, R> {
     R apply(A a, B b, C c, D d);

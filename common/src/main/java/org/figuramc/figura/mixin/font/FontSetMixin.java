@@ -6,7 +6,6 @@ import com.mojang.blaze3d.font.UnbakedGlyph;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.gui.font.GlyphStitcher;
 import net.minecraft.client.gui.font.providers.BitmapProvider;
-import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.ducks.BitmapProviderGlyphAccessor;
 import org.figuramc.figura.ducks.GlyphStitcherExtension;
 import org.spongepowered.asm.mixin.Final;

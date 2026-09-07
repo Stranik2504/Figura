@@ -21,7 +21,6 @@ import org.figuramc.figura.ducks.SubtitleOverlayAccessor;
 import org.figuramc.figura.lua.api.sound.LuaSound;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.permissions.Permissions;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

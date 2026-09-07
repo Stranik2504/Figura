@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import org.figuramc.figura.config.ConfigType;
 import org.figuramc.figura.gui.widgets.AbstractContainerElement;
 import org.figuramc.figura.gui.widgets.Button;
@@ -59,7 +60,7 @@ public abstract class AbstractConfigElement extends AbstractContainerElement {
     }
 
     public void renderTitle(GuiGraphicsExtractor gui, Font font, int y) {
-        gui.text(font, config.name, getX() + 16, y, UIHelper.adjustColor((config.disabled ? ChatFormatting.DARK_GRAY : ChatFormatting.WHITE).getColor()));
+        gui.text(font, config.name, getX() + 16, y, UIHelper.adjustColor((config.disabled ? TextColor.DARK_GRAY : TextColor.WHITE).getValue()));
     }
 
     @Override

@@ -1,13 +1,11 @@
 package org.figuramc.figura.lua.api.data;
 
 import org.figuramc.figura.avatar.Avatar;
-import org.figuramc.figura.lua.LuaNotNil;
 import org.figuramc.figura.lua.LuaWhitelist;
 import org.figuramc.figura.lua.docs.LuaMethodDoc;
 import org.figuramc.figura.lua.docs.LuaMethodOverload;
 import org.figuramc.figura.lua.docs.LuaTypeDoc;
 import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaString;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -2,7 +2,6 @@ package org.figuramc.figura.model;
 
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.player.PlayerCapeModel;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import org.figuramc.figura.ducks.PlayerModelCapeAccessor;

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Minecraft.class)
-public interface MinecraftAccesor {
+public interface MinecraftAccessor {
     @Invoker("getTickTargetMillis")
     float figura$invokeGetTickTargetMillis(float f);
 

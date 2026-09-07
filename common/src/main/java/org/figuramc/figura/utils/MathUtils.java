@@ -144,9 +144,9 @@ public class MathUtils {
 
     public static FiguraVec3 clamp(FiguraVec3 val, double min, double max) {
         return FiguraVec3.of(
-                Math.min(Math.max(val.x, min), max),
-                Math.min(Math.max(val.y, min), max),
-                Math.min(Math.max(val.z, min), max)
+                Math.clamp(val.x, min, max),
+                Math.clamp(val.y, min, max),
+                Math.clamp(val.z, min, max)
         );
     }
 

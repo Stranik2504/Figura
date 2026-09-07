@@ -2,10 +2,8 @@ package org.figuramc.figura.lua.api.event;
 
 import com.mojang.datafixers.util.Pair;
 import org.figuramc.figura.entries.FiguraEvent;
-import org.figuramc.figura.entries.FiguraVanillaPart;
 import org.figuramc.figura.lua.LuaNotNil;
 import org.figuramc.figura.lua.LuaWhitelist;
-import org.figuramc.figura.lua.api.vanilla_model.VanillaPart;
 import org.figuramc.figura.lua.docs.LuaFieldDoc;
 import org.figuramc.figura.lua.docs.LuaMetamethodDoc;
 import org.figuramc.figura.lua.docs.LuaMetamethodDoc.LuaMetamethodOverload;

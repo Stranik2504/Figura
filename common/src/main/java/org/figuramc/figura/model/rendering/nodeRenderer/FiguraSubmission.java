@@ -2,14 +2,12 @@ package org.figuramc.figura.model.rendering.nodeRenderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.feature.FeatureRenderer;
 import net.minecraft.client.renderer.feature.FeatureRendererType;
 import net.minecraft.client.renderer.feature.submit.BatchableSubmit;
 import net.minecraft.client.renderer.feature.submit.SubmitNode;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import org.figuramc.figura.model.rendertasks.RenderTask;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;

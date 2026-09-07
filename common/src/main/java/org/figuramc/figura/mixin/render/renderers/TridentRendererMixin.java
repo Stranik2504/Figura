@@ -69,7 +69,7 @@ public abstract class TridentRendererMixin<T extends ThrownTrident, S extends Th
             boolean bool = avatar.tridentRenderEvent(tickDelta, EntityAPI.wrap(trident));
 
             FiguraMod.popPushProfiler("render");
-            if (bool || avatar.renderTrident(poseStack, bufferSource, tickDelta, thrownTridentRenderState.lightCoords)) {
+            if (bool || avatar.renderTrident(poseStack, tickDelta, thrownTridentRenderState.lightCoords)) {
                 poseStack.popPose();
                 return false;
             }

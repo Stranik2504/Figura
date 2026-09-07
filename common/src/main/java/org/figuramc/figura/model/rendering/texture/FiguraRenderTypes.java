@@ -1,25 +1,16 @@
 package org.figuramc.figura.model.rendering.texture;
 
-import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.FilterMode;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
-
 import net.minecraft.client.renderer.rendertype.*;
 import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.TriState;
 import net.minecraft.util.Util;
-import org.figuramc.figura.utils.FiguraIdentifier;
 
-import java.util.Optional;
-import java.util.OptionalDouble;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 

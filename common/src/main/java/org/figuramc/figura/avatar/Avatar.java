@@ -38,7 +38,6 @@ import org.figuramc.figura.animation.AnimationPlayer;
 import org.figuramc.figura.backend2.NetworkStuff;
 import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.ducks.FiguraEntityRenderStateExtension;
-import org.figuramc.figura.ducks.NodeCollectorExtension;
 import org.figuramc.figura.gui.FiguraPortraitRenderState;
 import org.figuramc.figura.lua.FiguraLuaPrinter;
 import org.figuramc.figura.lua.FiguraLuaRuntime;
@@ -435,7 +434,6 @@ public class Avatar {
             return false;
         }
         Varargs result = run("ITEM_RENDER", render, item, mode, pos, rot, scale, leftHanded);
-        NodeCollectorExtension extension = (NodeCollectorExtension) nodeCollector;
 
         if(result == null)
             return false;
@@ -451,10 +449,11 @@ public class Avatar {
                 boolean renderedPart = figuraItemRendered(modelPart);
                 rendered |= renderedPart;
                 if (renderedPart) {
-                    extension.submitFiguraModel(this, null, (avatar, entity, bufferSource) -> {
-                        renderItem(copy, modelPart, light, overlay);
-                        return null;
-                    });
+                    renderItem(copy, modelPart, light, overlay); // синхронно, без буфера
+
+                    var submission = renderer.lastSubmission;
+                    if (submission != null && nodeCollector instanceof SubmitNodeCollection collection)
+                        collection.translucentCustomGeometry.submit(submission);
                 }
             }
 
@@ -847,7 +846,7 @@ public class Avatar {
 
         renderer.allowPivotParts = true;
 
-        var submission = ((ImmediateFiguraRenderer) renderer).lastSubmission;
+        var submission = renderer.lastSubmission;
 
         if (submission != null && submitNodeCollector instanceof SubmitNodeCollection collection)
             collection.translucentCustomGeometry.submit(submission);
@@ -1013,7 +1012,7 @@ public class Avatar {
 
     /**
      * We should call this whenever an avatar is no longer reachable!
-     * It free()s all the CachedType used inside of the avatar, and also
+     * It free()s all the CachedType used inside the avatar, and also
      * closes the native texture resources.
      * also closes and stops this avatar sounds
      */

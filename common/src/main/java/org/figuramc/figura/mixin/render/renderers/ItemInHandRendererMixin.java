@@ -20,15 +20,12 @@ import org.figuramc.figura.ducks.SkullBlockRendererAccessor;
 import org.figuramc.figura.lua.api.vanilla_model.VanillaModelPart;
 import org.figuramc.figura.math.matrix.FiguraMat4;
 import org.figuramc.figura.model.rendering.EntityRenderMode;
-import org.figuramc.figura.utils.RenderUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.BitSet;
 
 @Mixin(ItemInHandRenderer.class)
 public abstract class ItemInHandRendererMixin {

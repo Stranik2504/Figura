@@ -1,7 +1,6 @@
 package org.figuramc.figura.mixin.render.renderers;
 
 import net.minecraft.client.renderer.entity.state.ThrownTridentRenderState;
-import net.minecraft.world.entity.projectile.Projectile;
 import org.figuramc.figura.ducks.FiguraProjectileRenderStateExtension;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

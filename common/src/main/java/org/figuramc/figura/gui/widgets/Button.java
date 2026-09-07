@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.utils.FiguraIdentifier;
 import org.figuramc.figura.utils.ui.UIHelper;
@@ -127,7 +128,7 @@ public class Button extends net.minecraft.client.gui.components.Button implement
     }
 
     protected int getTextColor() {
-        return (!this.isActive() ? ChatFormatting.DARK_GRAY : ChatFormatting.WHITE).getColor();
+        return (!this.isActive() ? TextColor.DARK_GRAY : TextColor.WHITE).getValue();
     }
 
     public void setTooltip(Component tooltip) {

@@ -2,13 +2,10 @@ package org.figuramc.figura.mixin.render.feature;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.SubmitNodeCollection;
-import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
 import net.minecraft.client.renderer.feature.phase.SimpleFeatureRenderPhase;
 import net.minecraft.client.renderer.feature.phase.TranslucentFeatureRenderPhase;
@@ -17,24 +14,13 @@ import net.minecraft.client.renderer.feature.submit.TranslucentSubmit;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
-import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.avatar.Avatar;
-import org.figuramc.figura.avatar.AvatarManager;
-import org.figuramc.figura.config.Configs;
-import org.figuramc.figura.ducks.CameraRenderStateExtension;
 import org.figuramc.figura.ducks.NameTagSubmitExtension;
 import org.figuramc.figura.lua.api.nameplate.EntityNameplateCustomization;
-import org.figuramc.figura.math.vector.FiguraVec3;
-import org.figuramc.figura.permissions.Permissions;
 import org.figuramc.figura.utils.TextUtils;
-import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(SubmitNodeCollection.class)

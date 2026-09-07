@@ -21,7 +21,7 @@ import org.figuramc.figura.font.Emojis;
 import org.figuramc.figura.lua.FiguraLuaPrinter;
 import org.figuramc.figura.lua.docs.FiguraDocsManager;
 import org.figuramc.figura.mixin.gui.DebugScreenEntriesAccessor;
-import org.figuramc.figura.mixin.MinecraftAccesor;
+import org.figuramc.figura.mixin.MinecraftAccessor;
 import org.figuramc.figura.gui.widgets.DebugEntryFigura;
 import org.figuramc.figura.permissions.PermissionManager;
 import org.figuramc.figura.resources.FiguraRuntimeResources;
@@ -159,28 +159,28 @@ public class FiguraMod {
     // -- profiler -- //
 
     public static void pushProfiler(String name) {
-        ((MinecraftAccesor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().push(name);
+        ((MinecraftAccessor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().push(name);
     }
 
     public static void pushProfiler(Avatar avatar) {
-        ((MinecraftAccesor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().push(avatar.entityName.isBlank() ? avatar.owner.toString() : avatar.entityName);
+        ((MinecraftAccessor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().push(avatar.entityName.isBlank() ? avatar.owner.toString() : avatar.entityName);
     }
 
     public static void popPushProfiler(String name) {
-        ((MinecraftAccesor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().popPush(name);
+        ((MinecraftAccessor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().popPush(name);
     }
 
     public static void popProfiler() {
-        ((MinecraftAccesor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().pop();
+        ((MinecraftAccessor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().pop();
     }
 
     public static <T> T popReturnProfiler(T var) {
-        ((MinecraftAccesor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().pop();
+        ((MinecraftAccessor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler().pop();
         return var;
     }
 
     public static void popProfiler(int times) {
-        var profiler = ((MinecraftAccesor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler();
+        var profiler = ((MinecraftAccessor)Minecraft.getInstance()).figura$invokeGetMetricsRecorder().getProfiler();
         for (int i = 0; i < times; i++)
             profiler.pop();
     }

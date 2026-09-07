@@ -111,9 +111,13 @@ public class ColorUtils {
 
         try {
             ChatFormatting formatting = ChatFormatting.valueOf(hex.toUpperCase(Locale.US));
-            Integer i = formatting.getColor();
-            if (i != null)
-                return intToRGB(i);
+            var textColor = TextColor.fromLegacyFormat(formatting);
+
+            if (textColor == null)
+                return hexStringToRGB(hex, fallback);
+
+            var i = textColor.getValue();
+            return intToRGB(i);
         } catch (Exception ignored) {}
 
         return hexStringToRGB(hex, fallback);

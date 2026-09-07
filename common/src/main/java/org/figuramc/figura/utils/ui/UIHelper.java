@@ -2,29 +2,20 @@ package org.figuramc.figura.utils.ui;
 
 import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.buffers.Std140Builder;
-import com.mojang.blaze3d.font.GlyphInfo;
 import com.mojang.blaze3d.opengl.GlStateManager;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.systems.DeviceLimits;
 import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.GpuTexture;
-import com.mojang.blaze3d.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GlyphSource;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import net.minecraft.client.gui.components.debug.DebugScreenEntryList;
 import net.minecraft.client.gui.components.debug.DebugScreenEntryStatus;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.renderer.state.gui.BlitRenderState;
-import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
-import net.minecraft.client.renderer.state.gui.GuiTextRenderState;
 import net.minecraft.client.renderer.state.gui.pip.GuiEntityRenderState;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -54,7 +45,6 @@ import org.figuramc.figura.gui.screens.FiguraConfirmScreen;
 import org.figuramc.figura.gui.widgets.ContextMenu;
 import org.figuramc.figura.gui.widgets.FiguraWidget;
 import org.figuramc.figura.math.vector.FiguraVec4;
-import org.figuramc.figura.mixin.font.FontAccessor;
 import org.figuramc.figura.mixin.gui.GuiGraphicsExtractorAccessor;
 import org.figuramc.figura.model.rendering.EntityRenderMode;
 import org.figuramc.figura.utils.FiguraIdentifier;
@@ -292,7 +282,7 @@ public final class UIHelper {
     }
 
     public static void enableBlend() {
-        GlStateManager._enableBlend();
+        GlStateManager._enableBlend(0);
         GlStateManager._blendFuncSeparate(770, 771, 1, 0);
     }
 

@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.PlayerHeadSpecialRenderer;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
 import org.figuramc.figura.avatar.Avatar;

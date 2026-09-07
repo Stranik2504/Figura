@@ -2,10 +2,8 @@ package org.figuramc.figura.mixin.font;
 
 import com.mojang.blaze3d.font.GlyphBitmap;
 import com.mojang.blaze3d.font.GlyphInfo;
-import com.mojang.blaze3d.font.UnbakedGlyph;
 import net.minecraft.client.gui.font.FontTexture;
 import net.minecraft.client.gui.font.GlyphStitcher;
-import net.minecraft.client.gui.font.glyphs.BakedGlyph;
 import net.minecraft.client.gui.font.glyphs.BakedSheetGlyph;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.ducks.BakedGlyphAccessor;

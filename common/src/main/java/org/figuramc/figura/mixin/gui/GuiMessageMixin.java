@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(GuiMessage.class)
 public class GuiMessageMixin implements GuiMessageAccessor {
-
     @Unique private int color = 0;
 
     @Override @Intrinsic

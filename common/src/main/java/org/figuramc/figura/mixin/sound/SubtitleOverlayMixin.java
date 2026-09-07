@@ -1,7 +1,6 @@
 package org.figuramc.figura.mixin.sound;
 
 import net.minecraft.client.gui.components.SubtitleOverlay;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 import org.figuramc.figura.ducks.SubtitleOverlayAccessor;

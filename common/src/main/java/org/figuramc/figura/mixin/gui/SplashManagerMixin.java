@@ -27,7 +27,8 @@ import java.util.List;
 public class SplashManagerMixin {
 
     @Shadow @Final private static RandomSource RANDOM;
-    @Shadow @Final private List<String> splashes;
+    @Shadow
+    private List<String> splashes;
 
     @Unique
     private static final List<Component> FIGURA_SPLASHES = List.of(

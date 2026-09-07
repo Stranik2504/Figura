@@ -2,7 +2,6 @@ package org.figuramc.figura.utils;
 
 import net.minecraft.util.Util;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.Identifier;
 import org.figuramc.figura.FiguraMod;
 
 public final class FiguraIdentifier {

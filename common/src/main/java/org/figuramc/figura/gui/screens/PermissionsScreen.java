@@ -1,6 +1,5 @@
 package org.figuramc.figura.gui.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,7 +14,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.avatar.AvatarManager;
-import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.gui.FiguraToast;
 import org.figuramc.figura.gui.widgets.Button;
 import org.figuramc.figura.gui.widgets.EntityPreview;

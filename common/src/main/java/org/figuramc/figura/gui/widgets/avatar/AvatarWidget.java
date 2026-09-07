@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.avatar.local.LocalAvatarFetcher;
@@ -59,7 +60,7 @@ public class AvatarWidget extends AbstractAvatarWidget {
 
                 // description
                 Component parsedDescription = TextUtils.trimToWidthEllipsis(font, description, width, TextUtils.ELLIPSIS.copy().withStyle(description.getStyle()));
-                gui.text(font, parsedDescription, x + 22, y + font.lineHeight + 1, UIHelper.adjustColor(ChatFormatting.GRAY.getColor()));
+                gui.text(font, parsedDescription, x + 22, y + font.lineHeight + 1, UIHelper.adjustColor(TextColor.GRAY.getValue()));
 
                 // tooltip
                 if (parsedName != getMessage() || parsedDescription != description) {

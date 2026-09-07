@@ -1,9 +1,7 @@
 package org.figuramc.figura.gui.screens;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import org.figuramc.figura.gui.widgets.Label;
 import org.figuramc.figura.utils.ColorUtils;
 import org.figuramc.figura.utils.FiguraText;

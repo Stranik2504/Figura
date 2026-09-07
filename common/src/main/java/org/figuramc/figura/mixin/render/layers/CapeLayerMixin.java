@@ -34,7 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CapeLayer.class)
 public abstract class CapeLayerMixin extends RenderLayer<AvatarRenderState, PlayerModel> {
-
     @Shadow @Final private HumanoidModel<AvatarRenderState> model;
 
     public CapeLayerMixin(RenderLayerParent<AvatarRenderState, PlayerModel> renderLayerParent) {

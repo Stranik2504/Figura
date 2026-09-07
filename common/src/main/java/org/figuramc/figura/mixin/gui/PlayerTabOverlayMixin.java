@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 
 @Mixin(PlayerTabOverlay.class)
 public class PlayerTabOverlayMixin {
-
     @Unique private UUID uuid;
 
     @Inject(at = @At("RETURN"), method = "getNameForDisplay", cancellable = true)

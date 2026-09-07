@@ -9,7 +9,6 @@ import org.figuramc.figura.math.vector.FiguraVec3;
 import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Entity.class, priority = 999)
 public class EntityMixin {

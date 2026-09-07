@@ -37,7 +37,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(PlayerItemInHandLayer.class)
 public abstract class PlayerItemInHandLayerMixin <S extends AvatarRenderState, M extends EntityModel<S> & ArmedModel<S> & HeadedModel> extends ItemInHandLayer<S, M> {
-
     public PlayerItemInHandLayerMixin(RenderLayerParent<S, M> renderLayerParent) {
         super(renderLayerParent);
     }
