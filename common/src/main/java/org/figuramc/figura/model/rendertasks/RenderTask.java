@@ -1,6 +1,7 @@
 package org.figuramc.figura.model.rendertasks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.figuramc.figura.avatar.Avatar;
@@ -48,6 +49,9 @@ public abstract class RenderTask {
     }
 
     public abstract void render(PoseStack stack, FiguraVertexConsumerProvider buffer, int light, int overlay);
+    public boolean requiresDirectSubmit() { return false;}
+    public void renderDirect(PoseStack stack, SubmitNodeCollector collector, int light, int overlay) {}
+
     public abstract int getComplexity();
     public boolean shouldRender() {
         return customization.visible;

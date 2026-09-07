@@ -2,7 +2,7 @@ package org.figuramc.figura.model.rendertasks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -16,6 +16,7 @@ import org.figuramc.figura.lua.docs.LuaMethodDoc;
 import org.figuramc.figura.lua.docs.LuaMethodOverload;
 import org.figuramc.figura.lua.docs.LuaTypeDoc;
 import org.figuramc.figura.model.FiguraModelPart;
+import org.figuramc.figura.model.FiguraVertexConsumerProvider;
 import org.figuramc.figura.utils.LuaUtils;
 import org.figuramc.figura.utils.RenderUtils;
 import org.luaj.vm2.LuaError;
@@ -39,7 +40,15 @@ public class ItemTask extends RenderTask {
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+    public boolean requiresDirectSubmit() {
+        return true;
+    }
+
+    @Override
+    public void render(PoseStack poseStack, FiguraVertexConsumerProvider buffer, int light, int overlay) { }
+
+    @Override
+    public void renderDirect(PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay) {
         poseStack.scale(-16, 16, -16);
 
         LivingEntity entity = owner.renderer.entity instanceof LivingEntity living ? living : null;
@@ -47,9 +56,9 @@ public class ItemTask extends RenderTask {
         int newOverlay = this.customization.overlay != null ? this.customization.overlay : overlay;
         int seed = entity != null ? entity.getId() + displayMode.ordinal() : 0;
         RenderUtils.renderStatic(
-                entity, item, displayMode,
-                poseStack,
-                newLight, newOverlay
+            entity, item, displayMode,
+            poseStack,
+            newLight, newOverlay
         );
     }
 

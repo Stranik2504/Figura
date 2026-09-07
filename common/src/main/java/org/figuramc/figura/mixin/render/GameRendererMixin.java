@@ -3,39 +3,26 @@ package org.figuramc.figura.mixin.render;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.resource.CrossFrameResourcePool;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.render.GuiRenderer;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelTargetBundle;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.ducks.GameRendererAccessor;
 import org.figuramc.figura.gui.FiguraPortraitRenderer;
 import org.figuramc.figura.lua.api.ClientAPI;
-import org.figuramc.figura.math.matrix.FiguraMat4;
-import org.figuramc.figura.math.vector.FiguraVec3;
-import org.figuramc.figura.utils.EntityUtils;
 import org.figuramc.figura.utils.RenderUtils;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Quaternionfc;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -52,8 +39,6 @@ public abstract class GameRendererMixin implements GameRendererAccessor {
     @Shadow private boolean effectActive;
 
     @Shadow public abstract void checkEntityPostEffect(Entity entity);
-
-    @Shadow public abstract Minecraft getMinecraft();
 
 
     @Shadow @Nullable
@@ -128,10 +113,10 @@ public abstract class GameRendererMixin implements GameRendererAccessor {
 
     @ModifyArg(method = "<init>", index = 4,
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/render/GuiRenderer;<init>(Lnet/minecraft/client/renderer/state/gui/GuiRenderState;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;Ljava/util/List;)V"))
-    private List<PictureInPictureRenderer<?>> addPortraitRenderer(List<PictureInPictureRenderer<?>> list, @Local MultiBufferSource.BufferSource source) {
+                    target = "Lnet/minecraft/client/gui/render/GuiRenderer;<init>(Lnet/minecraft/client/renderer/state/gui/GuiRenderState;Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;Ljava/util/List;)V"))
+    private List<PictureInPictureRenderer<?>> addPortraitRenderer(List<PictureInPictureRenderer<?>> list) {
         List<PictureInPictureRenderer<?>> newList = new ArrayList<>(list);
-        newList.add(new FiguraPortraitRenderer(source));
+        newList.add(new FiguraPortraitRenderer());
         return newList;
     }
 

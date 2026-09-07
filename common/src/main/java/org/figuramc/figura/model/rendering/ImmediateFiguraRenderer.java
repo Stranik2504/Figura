@@ -27,6 +27,7 @@ import org.figuramc.figura.model.rendering.texture.FiguraTexture;
 import org.figuramc.figura.model.rendering.texture.FiguraTextureSet;
 import org.figuramc.figura.model.rendertasks.RenderTask;
 import org.figuramc.figura.utils.ColorUtils;
+import org.figuramc.figura.utils.FiguraSubmitUtils;
 import org.figuramc.figura.utils.ui.UIHelper;
 
 import java.util.*;
@@ -194,12 +195,16 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
 
             // push vertices to vertex consumer
             FiguraMod.pushProfiler("draw");
-            this.lastSubmission = new FiguraSubmission(
+            var submission = new FiguraSubmission(
                 Map.copyOf(vertexBuffer.primaryBuffers),
                 Map.copyOf(vertexBuffer.secondaryBuffers),
                 List.copyOf(queuedRenderTasks),
-                List.copyOf(queuedPivotBoxes)
+                List.copyOf(queuedPivotBoxes),
+                    outlineColor
             );
+
+            this.lastSubmission = submission;
+            FiguraSubmitUtils.submit(currentSubmitNodeCollector, submission);
             FiguraMod.popProfiler();
 
             // finish rendering
@@ -379,7 +384,13 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
                             break;
                         FiguraMod.pushProfiler(task.getName());
                         var taskPose = task.prepare(customizationStack);
-                        queuedRenderTasks.add(new FiguraSubmission.QueuedRenderTask(task, taskPose, light, overlay));
+
+                        if (task.requiresDirectSubmit()) {
+                            task.renderDirect(taskPose, currentSubmitNodeCollector, light, overlay);
+                        } else {
+                            queuedRenderTasks.add(new FiguraSubmission.QueuedRenderTask(task, taskPose, light, overlay));
+                        }
+
                         remainingComplexity[0] -= neededComplexity;
                         FiguraMod.popProfiler();
                     }

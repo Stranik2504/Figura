@@ -22,6 +22,11 @@ public class FiguraFeatureRenderer extends RenderTypeFeatureRenderer<FiguraSubmi
             drawBuffered(submit.primaryBuffers());
             drawBuffered(submit.secondaryBuffers());
 
+            if (submit.outlineColor() != 0) {
+                drawOutline(submit.primaryBuffers(), submit.outlineColor());
+                drawOutline(submit.secondaryBuffers(), submit.outlineColor());
+            }
+
             for (FiguraSubmission.QueuedRenderTask qt : submit.renderTasks()) {
                 qt.task().render(qt.poseStack(), this::getVertexBuilder, qt.light(), qt.overlay());
             }
@@ -42,6 +47,17 @@ public class FiguraFeatureRenderer extends RenderTypeFeatureRenderer<FiguraSubmi
 
             for (Consumer<VertexConsumer> action : entry.getValue())
                 action.accept(vc);
+        }
+    }
+
+    private void drawOutline(Map<RenderType, List<Consumer<VertexConsumer>>> buffers, int color) {
+        for (var entry : buffers.entrySet()) {
+            var outlineType = entry.getKey().outline();
+            if (outlineType.isEmpty()) continue;
+            VertexConsumer real = this.getVertexBuilder(outlineType.get());
+            VertexConsumer wrapped = new ConstantColorVertexConsumer(real, color);
+            for (var action : entry.getValue())
+                action.accept(wrapped);
         }
     }
 }

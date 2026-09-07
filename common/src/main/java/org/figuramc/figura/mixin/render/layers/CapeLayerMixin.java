@@ -18,7 +18,6 @@ import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.ducks.FiguraEntityRenderStateExtension;
 import org.figuramc.figura.ducks.FiguraSubmitCallBackExtension;
-import org.figuramc.figura.ducks.NodeCollectorExtension;
 import org.figuramc.figura.ducks.PlayerModelCapeAccessor;
 import org.figuramc.figura.lua.api.vanilla_model.VanillaPart;
 import org.figuramc.figura.mixin.ClientAvatarStateAccessor;
@@ -145,26 +144,22 @@ public abstract class CapeLayerMixin extends RenderLayer<AvatarRenderState, Play
         poseStack.pushPose();
         poseStack.last().set(pose.last());
 
-        ((NodeCollectorExtension)submitNodeCollector).submitFiguraModel(avatar, playerRenderState, (avatar, renderState, multiBufferSource) -> {
-            // rot
-            fakeCloak.setRotation(
-                    (float) Math.toRadians(6f + finalR / 2f + finalQ),
-                    (float) -Math.toRadians(finalS / 2f),
-                    (float) Math.toRadians(finalS / 2f)
-            );
+        fakeCloak.setRotation(
+            (float) Math.toRadians(6f + finalR / 2f + finalQ),
+            (float) -Math.toRadians(finalS / 2f),
+            (float) Math.toRadians(finalS / 2f)
+        );
 
-            // Copy rotations from fake cloak
-            if (avatar.luaRuntime != null) {
-                VanillaPart part = avatar.luaRuntime.vanilla_model.CAPE;
-                part.save(model);
-                if (avatar.permissions.get(Permissions.VANILLA_MODEL_EDIT) == 1)
-                    part.preTransform(model);
-            }
+        // Copy rotations from fake cloak
+        if (avatar.luaRuntime != null) {
+            VanillaPart part = avatar.luaRuntime.vanilla_model.CAPE;
+            part.save(model);
+            if (avatar.permissions.get(Permissions.VANILLA_MODEL_EDIT) == 1)
+                part.preTransform(model);
+        }
 
-            avatar.capeRender(entity, poseStack, renderState.lightCoords, tickDelta, fakeCloak);
-            return null;
+        avatar.capeRender(entity, poseStack, submitNodeCollector, playerRenderState.lightCoords, tickDelta, fakeCloak);
 
-        });
         submitCallBackExtension.figura$addPostRenderingCallback(() -> {
             if (avatar == null)
                 return;

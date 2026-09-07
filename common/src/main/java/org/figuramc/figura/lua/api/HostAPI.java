@@ -1,9 +1,9 @@
 package org.figuramc.figura.lua.api;
 
 import com.mojang.blaze3d.buffers.GpuBuffer;
+import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.CommandEncoder;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.datafixers.util.Pair;
@@ -47,8 +47,6 @@ import org.figuramc.figura.utils.TextUtils;
 import org.luaj.vm2.LuaError;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 @LuaWhitelist
 @LuaTypeDoc(
@@ -516,13 +514,12 @@ public class HostAPI {
         int height = renderTarget.height;
         NativeImage nativeImage = new NativeImage(width, height, false);
         GpuBuffer gpuBuffer = RenderSystem.getDevice()
-                .createBuffer(() -> "Figura Screenshot buffer", 9, width * height * gpuTexture.getFormat().pixelSize());
-        CommandEncoder commandEncoder = RenderSystem.getDevice().createCommandEncoder();
+                .createBuffer(() -> "Figura Screenshot buffer", 9, (long) width * height * gpuTexture.getFormat().blockSize());
         RenderSystem.getDevice().createCommandEncoder().copyTextureToBuffer(gpuTexture, gpuBuffer, 0, () -> {
-            try (GpuBuffer.MappedView readView = commandEncoder.mapBuffer(gpuBuffer, true, false)) {
+            try (GpuBufferSlice.MappedView readView = gpuBuffer.map(true, false)) {
                 for (int k = 0; k < height; k++) {
                     for (int l = 0; l < width; l++) {
-                        int m = readView.data().getInt((l + k * width) * gpuTexture.getFormat().pixelSize());
+                        int m = readView.data().getInt((l + k * width) * gpuTexture.getFormat().blockSize());
                         nativeImage.setPixelABGR(l, height - k - 1, m | 0xFF000000);
                     }
                 }

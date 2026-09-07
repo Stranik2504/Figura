@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -58,6 +59,8 @@ public abstract class FiguraRenderer {
 
     // matrices
     public FiguraSubmission lastSubmission;
+    public SubmitNodeCollector currentSubmitNodeCollector;
+    public int outlineColor = 0;
     public VanillaModelData vanillaModelData = new VanillaModelData();
 
     public PartFilterScheme currentFilterScheme;
@@ -221,24 +224,26 @@ public abstract class FiguraRenderer {
         return result;
     }
 
-    public void setupRenderer(PartFilterScheme currentFilterScheme, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing) {
-        this.setupRenderer(currentFilterScheme, tickDelta, light, alpha, overlay, translucent, glowing);
+    public void setupRenderer(PartFilterScheme currentFilterScheme, SubmitNodeCollector collector, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, int outlineColor) {
+        this.setupRenderer(currentFilterScheme, collector, tickDelta, light, alpha, overlay, translucent, glowing, outlineColor);
         this.setMatrices(matrices);
     }
 
-    public void setupRenderer(PartFilterScheme currentFilterScheme, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, double camX, double camY, double camZ) {
-        this.setupRenderer(currentFilterScheme, tickDelta, light, alpha, overlay, translucent, glowing);
+    public void setupRenderer(PartFilterScheme currentFilterScheme, SubmitNodeCollector collector, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, int outlineColor, double camX, double camY, double camZ) {
+        this.setupRenderer(currentFilterScheme, collector, tickDelta, light, alpha, overlay, translucent, glowing, outlineColor);
         this.setMatrices(camX, camY, camZ, matrices);
     }
 
-    private void setupRenderer(PartFilterScheme currentFilterScheme, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing) {
+    private void setupRenderer(PartFilterScheme currentFilterScheme, SubmitNodeCollector collector, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, int outlineColor) {
         this.currentFilterScheme = currentFilterScheme;
+        this.currentSubmitNodeCollector = collector;
         this.tickDelta = tickDelta;
         this.light = light;
         this.alpha = alpha;
         this.overlay = overlay;
         this.translucent = translucent;
         this.glowing = glowing;
+        this.outlineColor = outlineColor;
     }
 
     public void setMatrices(PoseStack matrices) {

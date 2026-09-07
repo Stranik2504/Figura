@@ -2,13 +2,11 @@ package org.figuramc.figura.model.rendertasks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.block.BlockModelResolver;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,8 +16,8 @@ import org.figuramc.figura.lua.api.world.BlockStateAPI;
 import org.figuramc.figura.lua.docs.LuaMethodDoc;
 import org.figuramc.figura.lua.docs.LuaMethodOverload;
 import org.figuramc.figura.lua.docs.LuaTypeDoc;
-import org.figuramc.figura.mixin.render.CameraRenderStateMixin;
 import org.figuramc.figura.model.FiguraModelPart;
+import org.figuramc.figura.model.FiguraVertexConsumerProvider;
 import org.figuramc.figura.utils.LuaUtils;
 
 import java.util.ArrayList;
@@ -39,7 +37,15 @@ public class BlockTask extends RenderTask {
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+    public boolean requiresDirectSubmit() {
+        return true;
+    }
+
+    @Override
+    public void render(PoseStack poseStack, FiguraVertexConsumerProvider buffer, int light, int overlay) { }
+
+    @Override
+    public void renderDirect(PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay) {
         poseStack.scale(16, 16, 16);
 
         int newLight = this.customization.light != null ? this.customization.light : light;
@@ -51,11 +57,11 @@ public class BlockTask extends RenderTask {
         var resolver = new BlockModelResolver(client.getModelManager());
         resolver.update(rendererState, block, BlockDisplayContext.create());
         rendererState.submit(
-                poseStack,
-                client.gameRenderer.getFeatureRenderDispatcher().getSubmitNodeStorage(),
-                newLight,
-                newOverlay,
-                0
+            poseStack,
+            collector,
+            newLight,
+            newOverlay,
+            0
         );
     }
 

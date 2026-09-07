@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import net.minecraft.client.gui.components.debug.DebugScreenEntryStatus;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -23,13 +23,13 @@ import org.figuramc.figura.lua.docs.LuaTypeDoc;
 import org.figuramc.figura.math.vector.FiguraVec2;
 import org.figuramc.figura.mixin.LivingEntityAccessor;
 import org.figuramc.figura.model.FiguraModelPart;
+import org.figuramc.figura.model.FiguraVertexConsumerProvider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.luaj.vm2.LuaError;
 
 import java.util.OptionalInt;
-import java.util.function.Function;
 
 @LuaWhitelist
 @LuaTypeDoc(
@@ -46,7 +46,15 @@ public class EntityTask extends RenderTask {
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
+    public boolean requiresDirectSubmit() {
+        return true;
+    }
+
+    @Override
+    public void render(PoseStack poseStack, FiguraVertexConsumerProvider buffer, int light, int overlay) { }
+
+    @Override
+    public void renderDirect(PoseStack stack, SubmitNodeCollector collector, int light, int overlay) {
         stack.scale(16, 16, 16);
 
         if (entity != null) {
@@ -61,14 +69,23 @@ public class EntityTask extends RenderTask {
             float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
             try {
                 CameraRenderState cameraRenderState = new CameraRenderState();
-                cameraRenderState.initialized = minecraft.gameRenderer.getMainCamera().isInitialized();
-                cameraRenderState.pos = minecraft.gameRenderer.getMainCamera().position();
-                cameraRenderState.blockPos = minecraft.gameRenderer.getMainCamera().blockPosition();
-                cameraRenderState.orientation = new Quaternionf(minecraft.gameRenderer.getMainCamera().rotation());
+                cameraRenderState.initialized = minecraft.gameRenderer.mainCamera().isInitialized();
+                cameraRenderState.pos = minecraft.gameRenderer.mainCamera().position();
+                cameraRenderState.blockPos = minecraft.gameRenderer.mainCamera().blockPosition();
+                cameraRenderState.orientation = new Quaternionf(minecraft.gameRenderer.mainCamera().rotation());
 
                 EntityRenderState state = dispatcher.extractEntity(entity, tickDelta);
                 state.lightCoords = this.customization.light != null ? this.customization.light : light;
-                dispatcher.submit(state, cameraRenderState, 0, 0, 0, stack, minecraft.gameRenderer.getSubmitNodeStorage());
+
+                dispatcher.submit(
+                    state,
+                    cameraRenderState,
+                    0,
+                    0,
+                    0,
+                    stack,
+                    collector
+                );
             }
             finally {
                 LivingEntityRendererAccessor.overrideOverlay = prev;

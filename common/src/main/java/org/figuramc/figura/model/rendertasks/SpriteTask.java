@@ -2,7 +2,6 @@ package org.figuramc.figura.model.rendertasks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.avatar.Avatar;
@@ -15,6 +14,7 @@ import org.figuramc.figura.math.vector.FiguraVec2;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.math.vector.FiguraVec4;
 import org.figuramc.figura.model.FiguraModelPart;
+import org.figuramc.figura.model.FiguraVertexConsumerProvider;
 import org.figuramc.figura.model.rendering.Vertex;
 import org.figuramc.figura.model.rendering.texture.FiguraRenderTypes;
 import org.figuramc.figura.model.rendering.texture.FiguraTexture;
@@ -49,7 +49,7 @@ public class SpriteTask extends RenderTask {
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+    public void render(PoseStack poseStack, FiguraVertexConsumerProvider buffer, int light, int overlay) {
         if (a == 0) return;
         poseStack.scale(-1, -1, 1);
 

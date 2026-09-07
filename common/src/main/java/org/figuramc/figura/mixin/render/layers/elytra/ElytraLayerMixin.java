@@ -34,7 +34,6 @@ import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.ducks.FiguraEntityRenderStateExtension;
 import org.figuramc.figura.ducks.FiguraSubmitCallBackExtension;
-import org.figuramc.figura.ducks.NodeCollectorExtension;
 import org.figuramc.figura.lua.api.vanilla_model.VanillaPart;
 import org.figuramc.figura.mixin.render.layers.EquipmentLayerRendererAccessor;
 import org.figuramc.figura.model.ParentType;
@@ -82,30 +81,25 @@ public abstract class ElytraLayerMixin<T extends LivingEntity, S extends Humanoi
         if (figura$avatar == null)
             return;
 
+        Avatar avatar = figura$avatar;
+
+        if (avatar.luaRuntime != null) {
+            VanillaPart part = avatar.luaRuntime.vanilla_model.ELYTRA;
+            part.save(elytraModel);
+            if (avatar.permissions.get(Permissions.VANILLA_MODEL_EDIT) == 1) {
+                vanillaPart = part;
+                vanillaPart.preTransform(elytraModel);
+            }
+        }
+
+        Integer id = humanoidRenderState instanceof AvatarRenderState playerRenderState ? playerRenderState.id : ((FiguraEntityRenderStateExtension)humanoidRenderState).figura$getEntityId();
+        if (id != null)
+            avatar.elytraRender(Minecraft.getInstance().level.getEntity(id), pose, submitNodeCollector, light, ((FiguraEntityRenderStateExtension)humanoidRenderState).figura$getTickDelta(), elytraModel);
+
+        if (vanillaPart != null)
+            vanillaPart.restore(elytraModel);
 
         FiguraSubmitCallBackExtension submitCallBackExtension = (FiguraSubmitCallBackExtension) elytraModel;
-        NodeCollectorExtension nodeCollectorExtension = (NodeCollectorExtension) submitNodeCollector;
-
-        nodeCollectorExtension.submitFiguraModel(figura$avatar, humanoidRenderState, (avatar, renderState, multiBufferSource) -> {
-            if (avatar.luaRuntime != null) {
-                VanillaPart part = avatar.luaRuntime.vanilla_model.ELYTRA;
-                part.save(elytraModel);
-                if (avatar.permissions.get(Permissions.VANILLA_MODEL_EDIT) == 1) {
-                    vanillaPart = part;
-                    vanillaPart.preTransform(elytraModel);
-                }
-            }
-
-            Integer id = humanoidRenderState instanceof AvatarRenderState playerRenderState ? playerRenderState.id : ((FiguraEntityRenderStateExtension)humanoidRenderState).figura$getEntityId();
-            if (id != null)
-                avatar.elytraRender(Minecraft.getInstance().level.getEntity(id), pose, light, ((FiguraEntityRenderStateExtension)humanoidRenderState).figura$getTickDelta(), elytraModel);
-
-            if (vanillaPart != null)
-                vanillaPart.restore(elytraModel);
-            return null;
-        });
-
-        Avatar avatar = figura$avatar;
         submitCallBackExtension.figura$addPreRenderingCallback(((multiBufferSource, poseStack) -> {
             if (avatar.luaRuntime != null) {
                 VanillaPart part = avatar.luaRuntime.vanilla_model.ELYTRA;

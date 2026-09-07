@@ -21,7 +21,6 @@ import org.figuramc.figura.gui.screens.WardrobeScreen;
 import org.figuramc.figura.lua.FiguraLuaPrinter;
 import org.figuramc.figura.utils.EntityUtils;
 import org.figuramc.figura.utils.FiguraText;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -117,15 +116,6 @@ public abstract class MinecraftMixin {
             PopupMenu.hotbarKeyPressed(i);
         if (ActionWheel.isEnabled())
             ActionWheel.hotbarKeyPressed(i);
-    }
-
-    @Inject(at = @At("HEAD"), method = "setScreen")
-    private void setScreen(Screen screen, CallbackInfo ci) {
-        if (ActionWheel.isEnabled())
-            ActionWheel.setEnabled(false);
-
-        if (PopupMenu.isEnabled())
-            PopupMenu.run();
     }
 
     @Inject(at = @At("RETURN"), method = "clearClientLevel")

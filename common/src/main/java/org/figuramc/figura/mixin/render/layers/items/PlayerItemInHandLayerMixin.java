@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.ducks.FiguraItemStackRenderStateExtension;
-import org.figuramc.figura.ducks.NodeCollectorExtension;
 import org.figuramc.figura.lua.api.world.ItemStackAPI;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.model.ParentType;
@@ -67,15 +66,20 @@ public abstract class PlayerItemInHandLayerMixin <S extends AvatarRenderState, M
             float s = 10f;
             stack.scale(s, s, s);
             stack.translate(0, 0, 7 / 16f);
-            ItemTransform transform = ((FiguraItemStackRenderStateExtension)itemStackRenderState).figura$getItemTransform();
-            NodeCollectorExtension nodeCollectorExtension = (NodeCollectorExtension) submitNodeCollector;
-            nodeCollectorExtension.submitFiguraModel(av, avatarRenderState, (avatar, entityState, multibufferSource) -> {
-                if (!avatar.itemRenderEvent(ItemStackAPI.verify(((FiguraItemStackRenderStateExtension)itemStackRenderState).figura$getItemStack()), ((FiguraItemStackRenderStateExtension)itemStackRenderState).figura$getDisplayContext().name(), FiguraVec3.fromVec3f(transform.translation()), FiguraVec3.of(transform.rotation().z(), transform.rotation().y(), transform.rotation().x()), FiguraVec3.fromVec3f(transform.scale()), ((FiguraItemStackRenderStateExtension) itemStackRenderState).figura$isLeftHanded(), stack, submitNodeCollector, light, OverlayTexture.NO_OVERLAY))
-                    itemStackRenderState.submit(stack, submitNodeCollector, light, OverlayTexture.NO_OVERLAY, entityState.outlineColor);
+            ItemTransform transform = ((FiguraItemStackRenderStateExtension) itemStackRenderState).figura$getItemTransform();
 
-                return null;
-            });
+            boolean handled = av.itemRenderEvent(
+                    ItemStackAPI.verify(((FiguraItemStackRenderStateExtension) itemStackRenderState).figura$getItemStack()),
+                    ((FiguraItemStackRenderStateExtension) itemStackRenderState).figura$getDisplayContext().name(),
+                    FiguraVec3.fromVec3f(transform.translation()),
+                    FiguraVec3.of(transform.rotation().z(), transform.rotation().y(), transform.rotation().x()),
+                    FiguraVec3.fromVec3f(transform.scale()),
+                    ((FiguraItemStackRenderStateExtension) itemStackRenderState).figura$isLeftHanded(),
+                    stack, submitNodeCollector, light, OverlayTexture.NO_OVERLAY
+            );
 
+            if (!handled)
+                itemStackRenderState.submit(stack, submitNodeCollector, light, OverlayTexture.NO_OVERLAY, avatarRenderState.outlineColor);
         })) {
             ci.cancel();
         }

@@ -1,7 +1,6 @@
 package org.figuramc.figura.lua.api.world;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.BlockStateModelSet;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -158,7 +157,7 @@ public class BlockStateAPI {
     @LuaWhitelist
     @LuaMethodDoc("blockstate.has_emissive_lighting")
     public boolean hasEmissiveLighting() {
-        return blockState.emissiveRendering(WorldAPI.getCurrentWorld(), getBlockPos());
+        return blockState.emissiveRendering();
     }
 
     @LuaWhitelist

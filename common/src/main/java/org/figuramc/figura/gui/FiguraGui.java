@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.ProjectionMatrixBuffer;
+import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.world.entity.Entity;
 import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.avatar.Avatar;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class FiguraGui {
     private static final ProjectionMatrixBuffer guiProjectionMatrixBuffer = new ProjectionMatrixBuffer("gui");
+    private static final SubmitNodeStorage HUD_SUBMIT_STORAGE = new SubmitNodeStorage();
 
     public static void onRender(GuiGraphicsExtractor guiGraphics, float tickDelta, CallbackInfo ci) {
         if (AvatarManager.panic)
@@ -39,8 +41,8 @@ public class FiguraGui {
         ProjectionType previousProjectionType = RenderSystem.getProjectionType();
 
         RenderSystem.setProjectionMatrix(
-                guiProjectionMatrixBuffer.getBuffer(new Matrix4f().setOrtho(0.0F, (float)window.getWidth() / window.getGuiScale(), (float)window.getHeight() / window.getGuiScale(), 0.0F, 1000.0F, 11000.0F)),
-                ProjectionType.ORTHOGRAPHIC
+            guiProjectionMatrixBuffer.getBuffer(new Matrix4f().setOrtho(0.0F, (float)window.getWidth() / window.getGuiScale(), (float)window.getHeight() / window.getGuiScale(), 0.0F, 1000.0F, 11000.0F)),
+            ProjectionType.ORTHOGRAPHIC
         );
 
         Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
@@ -54,7 +56,9 @@ public class FiguraGui {
             stack.setIdentity();
             stack.last().pose().mul(guiGraphics.pose());
 
-            avatar.hudRender(stack, entity, tickDelta);
+            avatar.hudRender(stack, HUD_SUBMIT_STORAGE, entity, tickDelta);
+            Minecraft.getInstance().gameRenderer.featureRenderDispatcher().renderAllFeatures(HUD_SUBMIT_STORAGE);
+
             stack.popPose();
             // hud hidden by script
             if (avatar.luaRuntime != null && !avatar.luaRuntime.renderer.renderHUD) {

@@ -22,7 +22,6 @@ import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.ducks.EntityRendererAccessor;
 import org.figuramc.figura.ducks.FiguraSubmitCallBackExtension;
-import org.figuramc.figura.ducks.NodeCollectorExtension;
 import org.figuramc.figura.lua.api.nameplate.EntityNameplateCustomization;
 import org.figuramc.figura.lua.api.vanilla_model.VanillaPart;
 import org.figuramc.figura.permissions.Permissions;
@@ -150,8 +149,6 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         if (avatar == null)
             return;
 
-        NodeCollectorExtension nodeCollectorExt = (NodeCollectorExtension) submitNodeCollector;
-
         float delta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
 
         PoseStack copy = new PoseStack();
@@ -161,30 +158,24 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         PlayerModel playerModel = getModel();
 
         Map<ModelPart, PartPose> modelState = RenderUtils.captureModelState(playerModel);
+        RenderUtils.restoreModelPoseState(playerModel, modelState);
 
-        nodeCollectorExt.submitFiguraModel(avatar, null, (playerAvatar, state, bufferSource) -> {
+        if (avatar != null && avatar.luaRuntime != null) {
+            VanillaPart part = avatar.luaRuntime.vanilla_model.PLAYER;
+            PlayerModel model = this.getModel();
 
-            RenderUtils.restoreModelPoseState(playerModel, modelState);
+            part.save(model);
 
-            if (playerAvatar != null && playerAvatar.luaRuntime != null) {
-                VanillaPart part = playerAvatar.luaRuntime.vanilla_model.PLAYER;
-                PlayerModel model = this.getModel();
-
-                part.save(model);
-
-                if (playerAvatar.permissions.get(Permissions.VANILLA_MODEL_EDIT) == 1) {
-                    part.preTransform(model);
-                    part.posTransform(model);
-                }
+            if (avatar.permissions.get(Permissions.VANILLA_MODEL_EDIT) == 1) {
+                part.preTransform(model);
+                part.posTransform(model);
             }
+        }
 
-            playerAvatar.firstPersonRender(copy, Minecraft.getInstance().player, playerModel, arm, light, delta);
+        avatar.firstPersonRender(copy, submitNodeCollector, Minecraft.getInstance().player, playerModel, arm, light, delta);
 
-            if (playerAvatar.luaRuntime != null)
-                playerAvatar.luaRuntime.vanilla_model.PLAYER.restore(playerModel);
-
-            return null;
-        });
+        if (avatar.luaRuntime != null)
+            avatar.luaRuntime.vanilla_model.PLAYER.restore(playerModel);
 
         avatar = null;
     }

@@ -4,18 +4,16 @@ import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelPart;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.TeamColor;
 import org.figuramc.figura.lua.LuaNotNil;
 import org.figuramc.figura.lua.LuaWhitelist;
-import org.figuramc.figura.lua.NbtToLua;
 import org.figuramc.figura.lua.ReadOnlyLuaTable;
 import org.figuramc.figura.lua.api.world.ItemStackAPI;
 import org.figuramc.figura.lua.docs.LuaMethodDoc;
 import org.figuramc.figura.lua.docs.LuaMethodOverload;
 import org.figuramc.figura.lua.docs.LuaTypeDoc;
-import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.mixin.FoodDataMixin;
 import org.figuramc.figura.mixin.PlayerModelTypeAccessor;
 import org.figuramc.figura.utils.EntityUtils;
@@ -189,7 +187,7 @@ public class PlayerAPI extends LivingEntityAPI<Player> {
 
         map.put("name", team.getName());
         map.put("display_name", team.getDisplayName().getString());
-        map.put("color", team.getColor().getName());
+        map.put("color", team.getColor().map(TeamColor::getSerializedName).orElse(null));
         map.put("prefix", team.getPlayerPrefix().getString());
         map.put("suffix", team.getPlayerSuffix().getString());
         map.put("friendly_fire", team.isAllowFriendlyFire());

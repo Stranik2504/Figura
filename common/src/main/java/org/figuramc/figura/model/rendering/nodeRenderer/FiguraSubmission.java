@@ -17,7 +17,8 @@ public record FiguraSubmission(
     Map<RenderType, List<Consumer<VertexConsumer>>> primaryBuffers,
     Map<RenderType, List<Consumer<VertexConsumer>>> secondaryBuffers,
     List<QueuedRenderTask> renderTasks,
-    List<QueuedPivotBox> pivotBoxes
+    List<QueuedPivotBox> pivotBoxes,
+    int outlineColor
 ) implements SubmitNode, BatchableSubmit {
     public static final FeatureRendererType<FiguraSubmission> TYPE = FeatureRendererType.create("figura:avatar_submission");
 

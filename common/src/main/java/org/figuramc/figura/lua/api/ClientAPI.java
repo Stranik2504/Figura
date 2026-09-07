@@ -9,7 +9,6 @@ import net.minecraft.client.CloudStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.Hud;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.multiplayer.ServerData;
@@ -19,7 +18,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.repository.Pack;
@@ -626,12 +624,10 @@ public class ClientAPI {
         assert Minecraft.getInstance().player != null;
         PlayerTeam playerTeam = scoreboard.getPlayersTeam(Minecraft.getInstance().player.getScoreboardName());
         if (playerTeam != null) {
-            int id = playerTeam.getColor()
-                    .map(TextColor::fromLegacyFormat)
-                    .map(TextColor::serialize)
-                    .orElse(-1);
+            int id = playerTeam.getColor().map(TeamColor::ordinal).orElse(-1);
+            String name = playerTeam.getColor().map(TeamColor::getSerializedName).orElse(null);
             if (id >= 0) {
-                objectives.put("sidebar_team_" + playerTeam.getColor().getName(), scoreboard.getDisplayObjective(DisplaySlot.BY_ID.apply(3 + id)));
+                objectives.put("sidebar_team_" + name, scoreboard.getDisplayObjective(DisplaySlot.BY_ID.apply(3 + id)));
             }
         }
 
