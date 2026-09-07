@@ -57,7 +57,7 @@ public abstract class ArrowRendererMixin<T extends AbstractArrow, S extends Arro
             boolean bool = avatar.arrowRenderEvent(tickDelta, EntityAPI.wrap(arrow));
 
             FiguraMod.popPushProfiler("render");
-            if (bool || avatar.renderArrow(poseStack, multiBufferSource, tickDelta, arrowRenderState.lightCoords)) {
+            if (bool || avatar.renderArrow(poseStack, tickDelta, arrowRenderState.lightCoords)) {
                 poseStack.popPose();
                 // this will skip the original render call
                 return false;

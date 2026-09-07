@@ -2,6 +2,7 @@ package org.figuramc.figura.utils;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.math.vector.FiguraVec4;
 

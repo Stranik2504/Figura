@@ -1,25 +1,43 @@
 package org.figuramc.figura.mixin.render.feature;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
-import org.figuramc.figura.ducks.NameTagFeatureRenderer$StorageExtension;
+import org.figuramc.figura.ducks.NameTagSubmitExtension;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(NameTagFeatureRenderer.class)
-public class NameTagFeatureRendererMixin {
-    @Inject(method = "renderTranslucent", at = @At(value = "TAIL"))
+@Mixin(NameTagFeatureRenderer.Submit.class)
+public class NameTagFeatureRendererMixin implements NameTagSubmitExtension {
+    /*@Inject(method = "renderTranslucent", at = @At(value = "TAIL"))
     private void renderOutlineTexts(CallbackInfo ci, @Local(argsOnly = true) MultiBufferSource.BufferSource bufferSource,
                                     @Local(argsOnly = true) Font font, @Local NameTagFeatureRenderer.Storage storage) {
         NameTagFeatureRenderer$StorageExtension storageExt = (NameTagFeatureRenderer$StorageExtension) storage;
         for (SubmitNodeStorage.NameTagSubmit outlineText : storageExt.getOutlineSubmits()) {
             font.drawInBatch8xOutline(outlineText.text().getVisualOrderText(), outlineText.x(), outlineText.y(), outlineText.color(),
                     outlineText.backgroundColor(), outlineText.pose(), bufferSource, outlineText.lightCoords());
+
+            EntityRenderer.NAMETAG_SCALE
         }
+    }*/
+
+    @Unique
+    private boolean figura$outline = false;
+    @Unique
+    private int figura$outlineColor = 0x202020;
+
+    @Override
+    public boolean figura$hasOutline() {
+        return figura$outline;
     }
+
+    @Override
+    public void figura$setOutline(boolean outline, int color) {
+        this.figura$outline = outline;
+        this.figura$outlineColor = color;
+    }
+
+    @Override
+    public int figura$getOutlineColor() {
+        return figura$outlineColor;
+    }
+
 }

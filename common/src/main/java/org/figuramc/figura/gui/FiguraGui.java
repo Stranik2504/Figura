@@ -55,7 +55,7 @@ public class FiguraGui {
             stack.setIdentity();
             stack.last().pose().mul(guiGraphics.pose());
 
-            avatar.hudRender(stack, Minecraft.getInstance().renderBuffers().bufferSource(), entity, tickDelta);
+            avatar.hudRender(stack, entity, tickDelta);
             stack.popPose();
             // hud hidden by script
             if (avatar.luaRuntime != null && !avatar.luaRuntime.renderer.renderHUD) {

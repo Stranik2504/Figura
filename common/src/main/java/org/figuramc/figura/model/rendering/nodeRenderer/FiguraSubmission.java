@@ -1,10 +1,42 @@
 package org.figuramc.figura.model.rendering.nodeRenderer;
 
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import org.apache.commons.lang3.function.TriFunction;
-import org.figuramc.figura.avatar.Avatar;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.feature.FeatureRenderer;
+import net.minecraft.client.renderer.feature.FeatureRendererType;
+import net.minecraft.client.renderer.feature.submit.BatchableSubmit;
+import net.minecraft.client.renderer.feature.submit.SubmitNode;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import org.figuramc.figura.model.rendertasks.RenderTask;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-public record FiguraSubmission(Avatar avatar, EntityRenderState renderState, TriFunction<Avatar, EntityRenderState, MultiBufferSource, Void> renderer) {
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
+public record FiguraSubmission(
+    Map<RenderType, List<Consumer<VertexConsumer>>> primaryBuffers,
+    Map<RenderType, List<Consumer<VertexConsumer>>> secondaryBuffers,
+    List<QueuedRenderTask> renderTasks,
+    List<QueuedPivotBox> pivotBoxes
+) implements SubmitNode, BatchableSubmit {
+    public static final FeatureRendererType<FiguraSubmission> TYPE = FeatureRendererType.create("figura:avatar_submission");
+
+    @Override
+    public Object batchKey() {
+        return null;
+    }
+
+    @Override
+    public @NonNull FeatureRendererType<FiguraSubmission> featureType() {
+        return TYPE;
+    }
+
+    public record QueuedRenderTask(RenderTask task, PoseStack poseStack, int light, int overlay) {}
+
+    public record QueuedPivotBox(PoseStack.Pose pose,
+                                 double x1, double y1, double z1,
+                                 double x2, double y2, double z2,
+                                 float r, float g, float b, float a) {}
 }

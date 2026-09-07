@@ -45,7 +45,7 @@ public class HelpScreen extends AbstractPanelScreen {
         this.addRenderableWidget(new Title(FiguraText.of("gui.help.docs").withStyle(color), middle, y, labelWidth));
 
         IconButton docs;
-        this.addRenderableWidget(docs = new IconButton(middle - 60, y += lineHeight + 4, 120, 24, 20, 0, 20, ICONS, 60, 40, FiguraText.of("gui.help.ingame_docs"), null, button -> this.minecraft.setScreen(new DocsScreen(this))));
+        this.addRenderableWidget(docs = new IconButton(middle - 60, y += lineHeight + 4, 120, 24, 20, 0, 20, ICONS, 60, 40, FiguraText.of("gui.help.ingame_docs"), null, button -> this.minecraft.gui.setScreen(new DocsScreen(this))));
         docs.setActive(false);
         this.addRenderableWidget(new IconButton(middle - 60, y += 28, 120, 24, 0, 0, 20, ICONS, 60, 40, FiguraText.of("gui.help.lua_manual"), null, bx -> UIHelper.openURL(FiguraMod.Links.LuaManual.url).run()));
         this.addRenderableWidget(new IconButton(middle - 60, y += 28, 120, 24, 40, 0, 20, ICONS, 60, 40, FiguraText.of("gui.help.external_wiki"), null, bx -> UIHelper.openURL(FiguraMod.Links.Wiki.url).run()));

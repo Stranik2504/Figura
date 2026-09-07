@@ -21,6 +21,7 @@ import org.figuramc.figura.math.matrix.FiguraMat4;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.math.vector.FiguraVec4;
 import org.figuramc.figura.model.*;
+import org.figuramc.figura.model.rendering.nodeRenderer.FiguraSubmission;
 import org.figuramc.figura.model.rendering.texture.FiguraRenderTypes;
 import org.figuramc.figura.model.rendering.texture.FiguraTexture;
 import org.figuramc.figura.model.rendering.texture.FiguraTextureSet;
@@ -39,7 +40,10 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
     public static final FiguraMat4 CAMERA_POS_TO_WORLD_MATRIX = FiguraMat4.of();
 
     private static final PartCustomization pivotOffsetter = new PartCustomization();
-    protected static final VertexBuffer VERTEX_BUFFER = new VertexBuffer();
+
+    protected VertexBuffer vertexBuffer;
+    private final List<FiguraSubmission.QueuedRenderTask> queuedRenderTasks = new ArrayList<>();
+    private final List<FiguraSubmission.QueuedPivotBox> queuedPivotBoxes = new ArrayList<>();
 
     public ImmediateFiguraRenderer(Avatar avatar) {
         super(avatar);
@@ -117,6 +121,11 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
         // flag rendering state
         this.isRendering = true;
 
+        // clear last data
+        this.vertexBuffer = new VertexBuffer();
+        this.queuedRenderTasks.clear();
+        this.queuedPivotBoxes.clear();
+
         // iris fix
         int irisConfig = UIHelper.paperdoll || !ClientAPI.hasShaderPackMod() ? 0 : Configs.IRIS_COMPATIBILITY_FIX.value;
         doIrisEmissiveFix = (irisConfig >= 2 && ClientAPI.hasShaderPack()) || (avatar.renderMode != EntityRenderMode.RENDER && avatar.renderMode != EntityRenderMode.WORLD);
@@ -185,11 +194,13 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
 
             // push vertices to vertex consumer
             FiguraMod.pushProfiler("draw");
-            FiguraMod.pushProfiler("primary");
-            VERTEX_BUFFER.consume(true, bufferSource);
-            FiguraMod.popPushProfiler("secondary");
-            VERTEX_BUFFER.consume(false, bufferSource);
-            FiguraMod.popProfiler(2);
+            this.lastSubmission = new FiguraSubmission(
+                Map.copyOf(vertexBuffer.primaryBuffers),
+                Map.copyOf(vertexBuffer.secondaryBuffers),
+                List.copyOf(queuedRenderTasks),
+                List.copyOf(queuedPivotBoxes)
+            );
+            FiguraMod.popProfiler();
 
             // finish rendering
             checkEmpty();
@@ -367,7 +378,8 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
                         if (neededComplexity > remainingComplexity[0])
                             break;
                         FiguraMod.pushProfiler(task.getName());
-                        task.render(customizationStack, bufferSource, light, overlay);
+                        var taskPose = task.prepare(customizationStack);
+                        queuedRenderTasks.add(new FiguraSubmission.QueuedRenderTask(task, taskPose, light, overlay));
                         remainingComplexity[0] -= neededComplexity;
                         FiguraMod.popProfiler();
                     }
@@ -465,12 +477,12 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
         double boxSize = group ? 1 / 16d : 1 / 32d;
         boxSize /= Math.max(Math.cbrt(part.savedPartToWorldMat.det()), 0.02);
 
-        PoseStack stack = customization.copyIntoGlobalPoseStack();
+        PoseStack poseStack = customization.copyIntoGlobalPoseStack();
 
-        renderLineBox(stack.last(), bufferSource.getBuffer(RenderTypes.LINES),
+        queuedPivotBoxes.add(new FiguraSubmission.QueuedPivotBox(poseStack.last(),
                 -boxSize, -boxSize, -boxSize,
                 boxSize, boxSize, boxSize,
-                (float) color.x, (float) color.y, (float) color.z, 1f);
+                (float) color.x, (float) color.y, (float) color.z, 1f));
     }
 
     public static void renderLineBox(PoseStack.Pose pose, VertexConsumer vertices, double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float a) {
@@ -652,7 +664,7 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
         int overlay = customization.overlay;
         int light = vertexData.fullBright ? LightCoordsUtil.FULL_BRIGHT : customization.light;
 
-        VERTEX_BUFFER.getBufferFor(vertexData.renderType, vertexData.primary, vertexConsumer -> {
+        vertexBuffer.getBufferFor(vertexData.renderType, vertexData.primary, vertexConsumer -> {
             for (int i = 0; i < vertCount; i++) {
                 Vertex vertex = vertices.get(i);
 
@@ -692,17 +704,6 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
             HashMap<RenderType, List<Consumer<VertexConsumer>>> buffer = primary ? primaryBuffers : secondaryBuffers;
             List<Consumer<VertexConsumer>> list = buffer.computeIfAbsent(renderType, renderType1 -> new ArrayList<>());
             list.add(consumer);
-        }
-
-        public void consume(boolean primary, MultiBufferSource bufferSource) {
-            HashMap<RenderType, List<Consumer<VertexConsumer>>> map = primary ? primaryBuffers : secondaryBuffers;
-            for (Map.Entry<RenderType, List<Consumer<VertexConsumer>>> entry : map.entrySet()) {
-                VertexConsumer vertexConsumer = bufferSource.getBuffer(entry.getKey());
-                List<Consumer<VertexConsumer>> consumers = entry.getValue();
-                for (Consumer<VertexConsumer> consumer : consumers)
-                    consumer.accept(vertexConsumer);
-            }
-            map.clear();
         }
     }
 }

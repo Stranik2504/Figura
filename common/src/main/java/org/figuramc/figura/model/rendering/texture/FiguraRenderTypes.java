@@ -84,7 +84,6 @@ public enum FiguraRenderTypes {
                 (texture, affectsOutline) ->
                         FiguraRenderTypeFactory.create("figura_cutout_emissive_solid",
                                 RenderSetup.builder(RenderPipelines.BEACON_BEAM_TRANSLUCENT)
-                                        .bufferSize(256)
                                         .withTexture("Sampler0", texture)
                                         .affectsCrumbling()
                                         .sortOnUpload()
@@ -99,7 +98,6 @@ public enum FiguraRenderTypes {
                 texture -> FiguraRenderTypeFactory.create(
                         "figura_textured_portal",
                         RenderSetup.builder(RenderPipelines.END_GATEWAY)
-                                .bufferSize(256)
                                 .withTexture("Sampler0", texture)
                                 .withTexture("Sampler1", texture)
                                 .setOutline(RenderSetup.OutlineProperty.NONE)
@@ -111,7 +109,6 @@ public enum FiguraRenderTypes {
                 texture -> FiguraRenderTypeFactory.create(
                         "figura_blurry",
                         RenderSetup.builder(RenderPipelines.ENTITY_TRANSLUCENT)
-                                .bufferSize(256)
                                 .affectsCrumbling()
                                 .sortOnUpload()
                                 .useLightmap()
@@ -132,7 +129,6 @@ public enum FiguraRenderTypes {
                 texture -> FiguraRenderTypeFactory.create(
                         "figura_textured_glint_direct",
                         RenderSetup.builder(RenderPipelines.GLINT)
-                                .bufferSize(256)
                                 .withTexture("Sampler0", texture)
                                 .setTextureTransform(TextureTransform.ENTITY_GLINT_TEXTURING)
                                 .createRenderSetup()

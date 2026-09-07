@@ -2,20 +2,16 @@ package org.figuramc.figura.mixin.render.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.figuramc.figura.avatar.Avatar;
@@ -166,7 +162,7 @@ public abstract class CapeLayerMixin extends RenderLayer<AvatarRenderState, Play
                     part.preTransform(model);
             }
 
-            avatar.capeRender(entity, multiBufferSource, poseStack, renderState.lightCoords, tickDelta, fakeCloak);
+            avatar.capeRender(entity, poseStack, renderState.lightCoords, tickDelta, fakeCloak);
             return null;
 
         });

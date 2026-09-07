@@ -54,7 +54,7 @@ public class LevelRendererMixinFabric {
     @Inject(method = {"lambda$addMainPass$0(Lcom/mojang/blaze3d/buffers/GpuBufferSlice;Lnet/minecraft/client/renderer/state/level/LevelRenderState;Lnet/minecraft/util/profiling/ProfilerFiller;Lnet/minecraft/client/renderer/chunk/ChunkSectionsToRender;Lcom/mojang/blaze3d/resource/ResourceHandle;Lcom/mojang/blaze3d/resource/ResourceHandle;Lcom/mojang/blaze3d/resource/ResourceHandle;Lcom/mojang/blaze3d/resource/ResourceHandle;Lcom/mojang/blaze3d/resource/ResourceHandle;ZLorg/joml/Matrix4fc;)V"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;checkPoseStack(Lcom/mojang/blaze3d/vertex/PoseStack;)V", ordinal = 0))
     private void renderLevelFirstPerson(GpuBufferSlice gpuBufferSlice, LevelRenderState levelRenderState, ProfilerFiller profiler, ChunkSectionsToRender chunkSectionsToRender, ResourceHandle resourceHandle, ResourceHandle resourceHandle2, ResourceHandle resourceHandle3, ResourceHandle resourceHandle4, ResourceHandle resourceHandle5, boolean bl, Matrix4fc matrix4fc, CallbackInfo ci, @Local PoseStack stack
     ) {
-        Camera camera = this.minecraft.gameRenderer.getMainCamera();
+        Camera camera = this.minecraft.gameRenderer.mainCamera();
         DeltaTracker deltaTracker = this.minecraft.getDeltaTracker();
         if (camera.isDetached())
             return;

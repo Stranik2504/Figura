@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -18,6 +17,7 @@ import org.figuramc.figura.math.matrix.FiguraMat4;
 import org.figuramc.figura.model.FiguraModelPart;
 import org.figuramc.figura.model.ParentType;
 import org.figuramc.figura.model.VanillaModelData;
+import org.figuramc.figura.model.rendering.nodeRenderer.FiguraSubmission;
 import org.figuramc.figura.model.rendering.texture.FiguraTexture;
 import org.figuramc.figura.model.rendering.texture.FiguraTextureSet;
 import org.joml.Matrix3f;
@@ -57,7 +57,7 @@ public abstract class FiguraRenderer {
     public FiguraMat3 normalMat = FiguraMat3.of();
 
     // matrices
-    public MultiBufferSource bufferSource;
+    public FiguraSubmission lastSubmission;
     public VanillaModelData vanillaModelData = new VanillaModelData();
 
     public PartFilterScheme currentFilterScheme;
@@ -195,7 +195,7 @@ public abstract class FiguraRenderer {
      */
     public static FiguraMat4 worldToViewMatrix() {
         Minecraft client = Minecraft.getInstance();
-        Camera camera = client.gameRenderer.getMainCamera();
+        Camera camera = client.gameRenderer.mainCamera();
         Quaternionf rot = new Quaternionf(camera.rotation());
         rot.x *= -1;
         rot.z *= -1;
@@ -214,26 +214,25 @@ public abstract class FiguraRenderer {
      */
     public static FiguraMat4 worldToCameraPosMatrix() {
         Minecraft client = Minecraft.getInstance();
-        Camera camera = client.gameRenderer.getMainCamera();
+        Camera camera = client.gameRenderer.mainCamera();
         FiguraMat4 result = FiguraMat4.of();
         Vec3 cameraPos = camera.position().scale(-1);
         result.translate(cameraPos.x, cameraPos.y, cameraPos.z);
         return result;
     }
 
-    public void setupRenderer(PartFilterScheme currentFilterScheme, MultiBufferSource bufferSource, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing) {
-        this.setupRenderer(currentFilterScheme, bufferSource, tickDelta, light, alpha, overlay, translucent, glowing);
+    public void setupRenderer(PartFilterScheme currentFilterScheme, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing) {
+        this.setupRenderer(currentFilterScheme, tickDelta, light, alpha, overlay, translucent, glowing);
         this.setMatrices(matrices);
     }
 
-    public void setupRenderer(PartFilterScheme currentFilterScheme, MultiBufferSource bufferSource, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, double camX, double camY, double camZ) {
-        this.setupRenderer(currentFilterScheme, bufferSource, tickDelta, light, alpha, overlay, translucent, glowing);
+    public void setupRenderer(PartFilterScheme currentFilterScheme, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, double camX, double camY, double camZ) {
+        this.setupRenderer(currentFilterScheme, tickDelta, light, alpha, overlay, translucent, glowing);
         this.setMatrices(camX, camY, camZ, matrices);
     }
 
-    private void setupRenderer(PartFilterScheme currentFilterScheme, MultiBufferSource bufferSource, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing) {
+    private void setupRenderer(PartFilterScheme currentFilterScheme, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing) {
         this.currentFilterScheme = currentFilterScheme;
-        this.bufferSource = bufferSource;
         this.tickDelta = tickDelta;
         this.light = light;
         this.alpha = alpha;

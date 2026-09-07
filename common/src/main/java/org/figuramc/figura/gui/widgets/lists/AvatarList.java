@@ -54,7 +54,7 @@ public class AvatarList extends AbstractList {
                 FiguraIdentifier.of("textures/gui/new_avatar.png"),
                 60, 20,
                 FiguraText.of("gui.wardrobe.new_avatar.tooltip"),
-                button -> Minecraft.getInstance().setScreen(new AvatarWizardScreen(parentScreen)))
+                button -> Minecraft.getInstance().gui.setScreen(new AvatarWizardScreen(parentScreen)))
         );
 
         // unselect

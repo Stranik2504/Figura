@@ -1,27 +1,24 @@
 package org.figuramc.figura.mixin.render.renderers;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
-import org.figuramc.figura.avatar.Badges;
 import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.ducks.EntityRendererAccessor;
 import org.figuramc.figura.ducks.FiguraSubmitCallBackExtension;
@@ -128,7 +125,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         Map<ModelPart, PartPose> modelState = RenderUtils.captureModelState(model);
 
         Avatar localAvatar = avatar;
-        BiFunction<MultiBufferSource, PoseStack, Boolean> lambda = (bufferSource, stack) -> {
+        BiFunction<VertexConsumer, PoseStack, Boolean> lambda = (bufferSource, stack) -> {
             if (localAvatar != null && localAvatar.luaRuntime != null) {
                 VanillaPart part = localAvatar.luaRuntime.vanilla_model.PLAYER;
                 RenderUtils.restoreModelPoseState(model, modelState);
@@ -184,7 +181,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
                 }
             }
 
-            playerAvatar.firstPersonRender(copy, bufferSource, Minecraft.getInstance().player, playerModel, arm, light, delta);
+            playerAvatar.firstPersonRender(copy, Minecraft.getInstance().player, playerModel, arm, light, delta);
 
             if (playerAvatar.luaRuntime != null)
                 playerAvatar.luaRuntime.vanilla_model.PLAYER.restore(playerModel);

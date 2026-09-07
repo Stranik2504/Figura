@@ -3,11 +3,6 @@ package org.figuramc.figura.mixin.render.feature;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.OutlineBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import org.figuramc.figura.ducks.FiguraSubmitCallBackExtension;
 import org.spongepowered.asm.mixin.Final;
@@ -24,22 +19,27 @@ public class ModelFeatureRendererMixin {
     @Final
     private PoseStack poseStack;
 
-    @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;setupAnim(Ljava/lang/Object;)V"), cancellable = true)
-    private <S> void figura$beforeSetupAnim(SubmitNodeStorage.ModelSubmit<S> modelSubmit, RenderType renderType, VertexConsumer vertexConsumer,
-                                            OutlineBufferSource outlineBufferSource, MultiBufferSource.BufferSource bufferSource, CallbackInfo ci) {
-        FiguraSubmitCallBackExtension callBackExtension = (FiguraSubmitCallBackExtension) (Object) modelSubmit;
-        if (callBackExtension.figura$getPreventAnimSetup())
+    @Inject(
+        method = "prepareModel",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;setupAnim(Ljava/lang/Object;)V"),
+        cancellable = true
+    )
+    private <S> void figura$beforeSetupAnim(ModelFeatureRenderer.Submit<S> submit, CallbackInfo ci) {
+        FiguraSubmitCallBackExtension callBackExtension = (FiguraSubmitCallBackExtension) (Object) submit;
+        if (callBackExtension.figura$getPreventAnimSetup()) {
             ci.cancel();
+        }
     }
 
 
-    @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V", ordinal = 0), cancellable = true)
-    private <S> void figura$preRender(SubmitNodeStorage.ModelSubmit<S> modelSubmit, RenderType renderType, VertexConsumer vertexConsumer,
-                                            OutlineBufferSource outlineBufferSource, MultiBufferSource.BufferSource bufferSource, CallbackInfo ci) {
-        FiguraSubmitCallBackExtension callBackExtension = (FiguraSubmitCallBackExtension) (Object) modelSubmit;
+    @Inject(method = "prepareModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V"), cancellable = true)
+    private <S> void figura$preRender(ModelFeatureRenderer.Submit<S> submit, CallbackInfo ci, @Local(name = "buffer") VertexConsumer buffer) {
+        FiguraSubmitCallBackExtension callBackExtension = (FiguraSubmitCallBackExtension) (Object) submit;
+
+        assert callBackExtension != null;
 
         for (var callback : callBackExtension.figura$getPreRenderingCallbacks()) {
-            if (!callback.apply(bufferSource, poseStack)) {
+            if (!callback.apply(buffer, poseStack)) {
                 ci.cancel();
             }
         }
@@ -54,10 +54,13 @@ public class ModelFeatureRendererMixin {
         callBackExtension.figura$getPreRenderingCallbacks().clear();
     }
 
-    @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V", ordinal = 0, shift = At.Shift.AFTER))
-    private <S> void figura$postRender(SubmitNodeStorage.ModelSubmit<S> modelSubmit, RenderType renderType, VertexConsumer vertexConsumer,
-                                      OutlineBufferSource outlineBufferSource, MultiBufferSource.BufferSource bufferSource, CallbackInfo ci) {
-        FiguraSubmitCallBackExtension callBackExtension = (FiguraSubmitCallBackExtension) (Object) modelSubmit;
+    @Inject(
+            method = "prepareModel",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V", shift = At.Shift.AFTER)
+    )
+    private <S> void figura$postRender(ModelFeatureRenderer.Submit<S> submit, CallbackInfo ci) {
+        FiguraSubmitCallBackExtension callBackExtension = (FiguraSubmitCallBackExtension) (Object) submit;
+
         for (var callback : callBackExtension.figura$getPostRenderingCallbacks())
             callback.run();
 

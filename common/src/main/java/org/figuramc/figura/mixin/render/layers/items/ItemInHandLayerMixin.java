@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.resources.model.cuboid.ItemTransform;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.block.AbstractSkullBlock;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.ducks.FiguraItemStackRenderStateExtension;
-import org.figuramc.figura.ducks.NodeCollectorExtension;
 import org.figuramc.figura.ducks.SkullBlockRendererAccessor;
 import org.figuramc.figura.lua.api.world.ItemStackAPI;
 import org.figuramc.figura.math.vector.FiguraVec3;
@@ -92,7 +90,7 @@ public abstract class ItemInHandLayerMixin<S extends ArmedEntityRenderState, M e
     }
 
     @WrapOperation(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"))
-    private void figuraItemEvent(ItemStackRenderState instance, PoseStack matrices, SubmitNodeCollector submitNodeCollector, int light, int overlay, int outlineColor, Operation<Void> original, @Local(argsOnly = true) S armedState) {
+    private void figuraItemEvent(ItemStackRenderState instance, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, int outlineColor, Operation<Void> original, @Local(argsOnly = true, name = "state") S armedState) {
         ItemStack stack = ((FiguraItemStackRenderStateExtension)instance).figura$getItemStack();
         Entity entity = AvatarManager.getEntity(armedState);
         if (av != null && stack != null && entity != null && stack.getItem() instanceof BlockItem bl && bl.getBlock() instanceof AbstractSkullBlock sk) {
@@ -111,8 +109,8 @@ public abstract class ItemInHandLayerMixin<S extends ArmedEntityRenderState, M e
         if (av == null || !av.itemRenderEvent(ItemStackAPI.verify(stack), ((FiguraItemStackRenderStateExtension) instance).figura$getDisplayContext().name(),
                 FiguraVec3.fromVec3f(transform.translation()), FiguraVec3.of(transform.rotation().z(), transform.rotation().y(), transform.rotation().x()),
                 FiguraVec3.fromVec3f(transform.scale()), ((FiguraItemStackRenderStateExtension) instance).figura$isLeftHanded(),
-                matrices, submitNodeCollector, light, overlay)
+                poseStack, submitNodeCollector, lightCoords, overlayCoords)
         )
-            original.call(instance, matrices, submitNodeCollector, light, overlay, outlineColor);
+            original.call(instance, poseStack, submitNodeCollector, lightCoords, overlayCoords, outlineColor);
     }
 }

@@ -1,5 +1,6 @@
 package org.figuramc.figura.mixin.render.nodeRenderer;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollection;
 import net.minecraft.client.renderer.SubmitNodeStorage;
@@ -20,7 +21,7 @@ public abstract class SubmitNodeStorageMixin implements NodeCollectorExtension {
     public abstract SubmitNodeCollection order(int i);
 
     @Override
-    public <S extends EntityRenderState> void submitFiguraModel(Avatar avatar, S renderState, TriFunction<Avatar, S, MultiBufferSource, Void> renderer) {
+    public <S extends EntityRenderState> void submitFiguraModel(Avatar avatar, S renderState, TriFunction<Avatar, S, VertexConsumer, Void> renderer) {
         NodeCollectorExtension extension = (NodeCollectorExtension) this.order(0);
         extension.submitFiguraModel(avatar, renderState, renderer);
     }

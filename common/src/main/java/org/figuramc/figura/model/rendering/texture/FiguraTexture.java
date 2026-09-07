@@ -6,7 +6,7 @@ import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.AddressMode;
 import com.mojang.blaze3d.textures.FilterMode;
-import com.mojang.blaze3d.textures.TextureFormat;
+import com.mojang.blaze3d.GpuFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.MipmapStrategy;
 import net.minecraft.client.renderer.texture.SimpleTexture;
@@ -151,7 +151,8 @@ public class FiguraTexture extends SimpleTexture {
     @Override
     protected void doLoad(NativeImage nativeImage) {
         GpuDevice gpuDevice = RenderSystem.getDevice();
-        this.texture = gpuDevice.createTexture(this.resourceId()::toString, 5, TextureFormat.RGBA8, nativeImage.getWidth(), nativeImage.getHeight(), 1, 1);
+
+        this.texture = gpuDevice.createTexture(this.resourceId()::toString, 5, GpuFormat.RGBA8_UNORM, nativeImage.getWidth(), nativeImage.getHeight(), 1, 1);
         this.textureView = gpuDevice.createTextureView(this.texture);
         gpuDevice.createCommandEncoder().writeToTexture(this.texture, nativeImage);
     }
@@ -348,10 +349,10 @@ public class FiguraTexture extends SimpleTexture {
                 color.transform(matrix);
 
                 if (clip) {
-                    color.x = Math.max(0, Math.min(color.x, 1));
-                    color.y = Math.max(0, Math.min(color.y, 1));
-                    color.z = Math.max(0, Math.min(color.z, 1));
-                    color.w = Math.max(0, Math.min(color.w, 1));
+                    color.x = Math.clamp(color.x, 0, 1);
+                    color.y = Math.clamp(color.y, 0, 1);
+                    color.z = Math.clamp(color.z, 0, 1);
+                    color.w = Math.clamp(color.w, 0, 1);
                 }
 
                 setPixel(j, i, color, null, null, null);

@@ -1,8 +1,8 @@
 package org.figuramc.figura.gui;
 
+import com.mojang.blaze3d.GpuFormat;
 import com.mojang.blaze3d.ProjectionType;
 import com.mojang.blaze3d.opengl.GlStateManager;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -11,17 +11,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.gui.BlitRenderState;
 import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.client.renderer.ProjectionMatrixBuffer;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.gui.widgets.permissions.PlayerPermPackElement;
 import org.figuramc.figura.utils.ui.UIHelper;
 import org.joml.Matrix4f;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,22 +36,19 @@ public class FiguraPortraitRenderer extends PictureInPictureRenderer<FiguraPortr
     );
     Map<Avatar, TextureEntry> avatarToTexture = new HashMap<>();
     private boolean renderSkin;
-    public FiguraPortraitRenderer(MultiBufferSource.BufferSource bufferSource) {
-        super(bufferSource);
-    }
 
     @Override
-    public Class<FiguraPortraitRenderState> getRenderStateClass() {
+    public @NonNull Class<FiguraPortraitRenderState> getRenderStateClass() {
         return FiguraPortraitRenderState.class;
     }
 
     @Override
-    protected void renderToTexture(FiguraPortraitRenderState portraitState, PoseStack poseStack) {
-        Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_FLAT);
+    protected void renderToTexture(FiguraPortraitRenderState portraitState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
+        Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ITEMS_FLAT);
 
         Avatar avatar = portraitState.avatar();
         if (avatar != null) {
-            renderSkin = !avatar.renderHeadForPortrait(this.bufferSource, poseStack, LightCoordsUtil.FULL_BRIGHT, portraitState.modelScale(), portraitState.upsideDown());
+            renderSkin = !avatar.renderHeadForPortrait(submitNodeCollector, poseStack, LightCoordsUtil.FULL_BRIGHT, portraitState.modelScale(), portraitState.upsideDown());
         } else {
             renderSkin = true;
         }
@@ -100,9 +98,9 @@ public class FiguraPortraitRenderer extends PictureInPictureRenderer<FiguraPortr
 
         GpuDevice gpuDevice = RenderSystem.getDevice();
         if (entry.texture == null) {
-            entry.texture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " texture " + avatar.name, 12, TextureFormat.RGBA8, i, j, 1, 1);
+            entry.texture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " texture " + avatar.name, 12, GpuFormat.RGBA8_UNORM, i, j, 1, 1);
             entry.textureView = gpuDevice.createTextureView(entry.texture);
-            entry.depthTexture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " depth texture " + avatar.name, 8, TextureFormat.DEPTH32, i, j, 1, 1);
+            entry.depthTexture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " depth texture " + avatar.name, 8, GpuFormat.D32_FLOAT, i, j, 1, 1);
             entry.depthTextureView = gpuDevice.createTextureView(entry.depthTexture);
             entry.sampler = gpuDevice.createSampler(AddressMode.CLAMP_TO_EDGE, AddressMode.CLAMP_TO_EDGE, FilterMode.NEAREST, FilterMode.NEAREST, 1, OptionalDouble.empty());
         }

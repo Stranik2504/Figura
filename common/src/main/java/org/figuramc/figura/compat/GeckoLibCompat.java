@@ -9,6 +9,9 @@ import org.figuramc.figura.compat.wrappers.MethodWrapper;
 import java.util.Map;
 
 public class GeckoLibCompat {
+    // For 5.0 versions of GeckoLib
+    private static ClassWrapper GLRenderUtil5;
+    private static MethodWrapper getGeoModelForArmor5;
 
     // For newer versions of GeckoLib
     private static ClassWrapper GLRenderUtil;
@@ -20,7 +23,12 @@ public class GeckoLibCompat {
 
 
     public static void init() {
+        // Version 5
+        GLRenderUtil5 = new ClassWrapper("com.geckolib.util.RenderUtil");
+        getGeoModelForArmor5 = GLRenderUtil.getMethod("getGeckoLibArmorRenderer", ItemStack.class, EquipmentSlot.class);
+
         // Modern
+        // TODO: Check valid it and may be replace it
         GLRenderUtil = new ClassWrapper("software.bernie.geckolib.util.RenderUtil");
         getGeoModelForArmor = GLRenderUtil.getMethod("getGeoModelForArmor", ItemStack.class, EquipmentSlot.class, EquipmentClientInfo.LayerType.class);
 
@@ -30,6 +38,13 @@ public class GeckoLibCompat {
     }
 
     public static boolean armorHasCustomModel(ItemStack stack, EquipmentSlot slot, EquipmentClientInfo.LayerType layerType) {
+        if (GLRenderUtil5.isLoaded) {
+            if (getGeoModelForArmor5.exists()) {
+                return getGeoModelForArmor5.invoke(null, stack, slot) != null;
+            }
+            return false;
+        }
+
         if (GLRenderUtil.isLoaded) {
             if (getGeoModelForArmor.exists()) {
                 return getGeoModelForArmor.invoke(null, stack, slot, layerType) != null;

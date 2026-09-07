@@ -1,14 +1,10 @@
 package org.figuramc.figura.mixin.render.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.PlayerSkinRenderCache;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.PlayerHeadSpecialRenderer;
-import net.minecraft.client.renderer.special.SkullSpecialRenderer;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ResolvableProfile;
 import org.figuramc.figura.ducks.SkullBlockRendererAccessor;
 import org.figuramc.figura.ducks.SkullSpecialRendererExtension;
 import org.spongepowered.asm.mixin.Mixin;

@@ -3,6 +3,7 @@ package org.figuramc.figura.mixin.render.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.SubmitNodeCollection;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -28,6 +29,7 @@ import org.figuramc.figura.ducks.NodeCollectorExtension;
 import org.figuramc.figura.gui.PopupMenu;
 import org.figuramc.figura.lua.api.vanilla_model.VanillaPart;
 import org.figuramc.figura.math.matrix.FiguraMat4;
+import org.figuramc.figura.model.rendering.ImmediateFiguraRenderer;
 import org.figuramc.figura.model.rendering.PartFilterScheme;
 import org.figuramc.figura.permissions.Permissions;
 import org.figuramc.figura.utils.RenderUtils;
@@ -186,7 +188,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
             FiguraMod.popPushProfiler("renderEvent");
             avatar.renderEvent(tickDelta, poseMatrix);
 
-            avatar.render(entity, livingEntityState.yRot, tickDelta, translucent ? 0.15f : 1f, poseStack2, bufferSource, livingEntityState.lightCoords, overlay, model, filter, translucent, glowing);
+            avatar.render(entity, livingEntityState.yRot, tickDelta, translucent ? 0.15f : 1f, poseStack2, livingEntityState.lightCoords, overlay, model, filter, translucent, glowing);
 
             FiguraMod.popPushProfiler("postRenderEvent");
             avatar.postRenderEvent(tickDelta, poseMatrix);
@@ -198,6 +200,12 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
                 avatar.luaRuntime.vanilla_model.PLAYER.restore(model);
             return null;
         }));
+
+        var submission = ((ImmediateFiguraRenderer) localAvatar.renderer).lastSubmission;
+
+        if (submission != null) {
+            ((SubmitNodeCollection) submitNodeCollector).translucentCustomGeometry.submit(submission);
+        }
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"), method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V")
@@ -213,7 +221,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private void shouldShowName(T livingEntity, double d, CallbackInfoReturnable<Boolean> cir) {
         if (UIHelper.paperdoll)
             cir.setReturnValue(Configs.PREVIEW_NAMEPLATE.value);
-        else if (!Minecraft.renderNames() || livingEntity.getUUID().equals(PopupMenu.getEntityId()))
+        // TODO: Check is valid without !
+        else if (Minecraft.getInstance().gui.hud.isHidden() || livingEntity.getUUID().equals(PopupMenu.getEntityId()))
             cir.setReturnValue(false);
         else if (!AvatarManager.panic) {
             if (Configs.SELF_NAMEPLATE.value && livingEntity == Minecraft.getInstance().player)

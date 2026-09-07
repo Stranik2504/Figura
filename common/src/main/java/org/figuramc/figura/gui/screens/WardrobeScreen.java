@@ -172,13 +172,13 @@ public class WardrobeScreen extends AbstractPanelScreen {
 
         // sounds
         Button sounds = new Button(this.width - rightSide + 36, 28, 24, 24, 0, 0, 24, FiguraIdentifier.of("textures/gui/sound.png"), 72, 24, FiguraText.of("gui.wardrobe.sound.tooltip"),
-                button -> Minecraft.getInstance().setScreen(new SoundScreen(this))
+                button -> Minecraft.getInstance().gui.setScreen(new SoundScreen(this))
         );
         addRenderableWidget(sounds);
 
         // keybinds
         Button keybinds = new Button(this.width - rightSide + 72, 28, 24, 24, 0, 0, 24, FiguraIdentifier.of("textures/gui/keybind.png"), 72, 24, FiguraText.of("gui.wardrobe.keybind.tooltip"),
-                button -> Minecraft.getInstance().setScreen(new KeybindScreen(this))
+                button -> Minecraft.getInstance().gui.setScreen(new KeybindScreen(this))
         );
         addRenderableWidget(keybinds);
 
@@ -269,7 +269,7 @@ public class WardrobeScreen extends AbstractPanelScreen {
             packs.append(IOUtils.getFileNameOrEmpty(paths.get(i)));
         }
 
-        this.minecraft.setScreen(new FiguraConfirmScreen(confirmed -> {
+        this.minecraft.gui.setScreen(new FiguraConfirmScreen(confirmed -> {
             if (confirmed) {
                 try {
                     LocalAvatarFetcher.loadExternal(paths);
@@ -279,7 +279,7 @@ public class WardrobeScreen extends AbstractPanelScreen {
                     FiguraMod.LOGGER.error("Failed to copy files", e);
                 }
             }
-            this.minecraft.setScreen(this);
+            this.minecraft.gui.setScreen(this);
         }, FiguraText.of("gui.wardrobe.drop_files"), packs.toString(), this));
     }
 }

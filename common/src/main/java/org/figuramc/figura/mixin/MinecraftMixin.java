@@ -3,6 +3,7 @@ package org.figuramc.figura.mixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -37,7 +38,9 @@ public abstract class MinecraftMixin {
     @Shadow @Final public Options options;
     @Shadow public LocalPlayer player;
 
-    @Shadow public abstract void setScreen(@Nullable Screen screen);
+    // @Shadow public abstract void setScreen(@Nullable Screen screen);
+    @Final
+    @Shadow public Gui gui;
     @Shadow public abstract Entity getCameraEntity();
 
     @Unique
@@ -57,7 +60,7 @@ public abstract class MinecraftMixin {
 
         // reload avatar button
         if (Configs.WARDROBE_BUTTON.keyBind.consumeClick())
-            this.setScreen(new WardrobeScreen(null));
+            this.gui.setScreen(new WardrobeScreen(null));
 
         // action wheel button
         Boolean wheel = null;

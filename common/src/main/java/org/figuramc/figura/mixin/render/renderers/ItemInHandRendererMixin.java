@@ -41,8 +41,8 @@ public abstract class ItemInHandRendererMixin {
     @Unique Avatar avatar;
 
     // apparently hands are basically still immediate mode, wow thanks game...
-    @Inject(method = "renderHandsWithItems", at = @At("HEAD"))
-    private void onRenderHandsWithItems(float tickDelta, PoseStack matrices, SubmitNodeCollector submitNodeCollector, LocalPlayer player, int light, CallbackInfo ci) {
+    @Inject(method = "submitHandsWithItems", at = @At("HEAD"))
+    private void onSubmitHandsWithItems(float tickDelta, PoseStack matrices, SubmitNodeCollector submitNodeCollector, LocalPlayer player, int light, CallbackInfo ci) {
         avatar = AvatarManager.getAvatarForPlayer(player.getUUID());
         if (avatar == null)
             return;
@@ -55,8 +55,8 @@ public abstract class ItemInHandRendererMixin {
         FiguraMod.popProfiler(3);
     }
 
-    @Inject(method = "renderHandsWithItems", at = @At(value = "RETURN"))
-    private void afterRenderHandsWithItems(float tickDelta, PoseStack matrices, SubmitNodeCollector submitNodeCollector, LocalPlayer player, int light, CallbackInfo ci) {
+    @Inject(method = "submitHandsWithItems", at = @At(value = "RETURN"))
+    private void afterSubmitHandsWithItems(float tickDelta, PoseStack matrices, SubmitNodeCollector submitNodeCollector, LocalPlayer player, int light, CallbackInfo ci) {
         if (avatar == null)
             return;
 
@@ -69,8 +69,8 @@ public abstract class ItemInHandRendererMixin {
 
     }
 
-    @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
-    private void renderArmWithItem(AbstractClientPlayer player, float tickDelta, float pitch, InteractionHand hand, float swingProgress, ItemStack item, float equipProgress, PoseStack matrices, SubmitNodeCollector submitNodeCollector, int light, CallbackInfo ci) {
+    @Inject(method = "submitArmWithItem", at = @At("HEAD"), cancellable = true)
+    private void submitArmWithItem(AbstractClientPlayer player, float tickDelta, float pitch, InteractionHand hand, float swingProgress, ItemStack item, float equipProgress, PoseStack matrices, SubmitNodeCollector submitNodeCollector, int light, CallbackInfo ci) {
         if (player.isScoping() || avatar == null || avatar.luaRuntime == null)
             return;
 

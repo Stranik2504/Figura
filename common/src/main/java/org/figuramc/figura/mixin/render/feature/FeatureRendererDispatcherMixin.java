@@ -1,27 +1,26 @@
 package org.figuramc.figura.mixin.render.feature;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.SubmitNodeCollection;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import net.minecraft.client.renderer.feature.FeatureRendererMap;
 import org.figuramc.figura.model.rendering.nodeRenderer.FiguraFeatureRenderer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FeatureRenderDispatcher.class)
 public class FeatureRendererDispatcherMixin {
-    @Shadow
     @Final
-    private MultiBufferSource.BufferSource bufferSource;
-    final FiguraFeatureRenderer figuraFeatureRenderer = new FiguraFeatureRenderer();
+    @Shadow
+    private FeatureRendererMap featureRenderers;
+    @Unique
+    final FiguraFeatureRenderer noFigura$figuraFeatureRenderer = new FiguraFeatureRenderer();
 
-    @Inject(method = "renderTranslucentFeatures",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/ShadowFeatureRenderer;renderTranslucent(Lnet/minecraft/client/renderer/SubmitNodeCollection;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;)V"))
-    private void figura$renderFiguraFeatures(CallbackInfo ci, @Local SubmitNodeCollection submitNodeCollection) {
-        figuraFeatureRenderer.render(submitNodeCollection, this.bufferSource);
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void figura$renderFiguraFeatures(CallbackInfo ci) {
+        featureRenderers.put(FiguraFeatureRenderer.TYPE, noFigura$figuraFeatureRenderer);
     }
 }

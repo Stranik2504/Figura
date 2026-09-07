@@ -6,6 +6,7 @@ import com.mojang.blaze3d.font.GlyphInfo;
 import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.DeviceLimits;
 import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
@@ -143,7 +144,7 @@ public final class UIHelper {
             return;
 
         GpuDevice gpuDevice = RenderSystem.getDevice();
-        int paddedSize = Mth.roundToward(Lighting.UBO_SIZE, gpuDevice.getUniformOffsetAlignment());
+        int paddedSize = Mth.roundToward(Lighting.UBO_SIZE, gpuDevice.getDeviceInfo().limits().minUniformOffsetAlignment());
         buffer = gpuDevice.createBuffer(() -> "Figura Lighting UBO", 136, paddedSize);
         Vector3f lighting0 = Util.make(new Vector3f(-0.2f, -1f, 1f), Vector3f::normalize);
         Vector3f lighting1 = Util.make(new Vector3f(-0.2f, 0.4f, 0.3f), Vector3f::normalize);
@@ -189,7 +190,7 @@ public final class UIHelper {
                 }
 
                 // lightning
-                Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ENTITY_IN_UI);
+                Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ENTITY_IN_UI);
 
                 // invisibility
                 if (Configs.PAPERDOLL_INVISIBLE.value)
@@ -224,7 +225,7 @@ public final class UIHelper {
                 entity.yHeadRot = -yaw + bodyY;
 
                 // lightning
-                Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ENTITY_IN_UI);
+                Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ENTITY_IN_UI);
             }
         }
 
@@ -282,7 +283,7 @@ public final class UIHelper {
 
         // pop matrix
         pose.popMatrix();
-        Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_3D);
+        Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ITEMS_3D);
 
         // restore entity data
         entity.setXRot(headX);
@@ -425,7 +426,7 @@ public final class UIHelper {
     public static void highlight(GuiGraphicsExtractor gui, FiguraWidget widget, Component text) {
         // screen
         int screenW, screenH;
-        if (Minecraft.getInstance().screen instanceof AbstractPanelScreen panel) {
+        if (Minecraft.getInstance().gui.screen() instanceof AbstractPanelScreen panel) {
             screenW = panel.width;
             screenH = panel.height;
         } else {
@@ -616,9 +617,9 @@ public final class UIHelper {
 
     public static Runnable openURL(String url) {
         Minecraft minecraft = Minecraft.getInstance();
-        return () -> minecraft.setScreen(new FiguraConfirmScreen.FiguraConfirmLinkScreen((bl) -> {
+        return () -> minecraft.gui.setScreen(new FiguraConfirmScreen.FiguraConfirmLinkScreen((bl) -> {
             if (bl) Util.getPlatform().openUri(url);
-        }, url, minecraft.screen));
+        }, url, minecraft.gui.screen()));
     }
 
     public static void renderLoading(GuiGraphicsExtractor gui, int x, int y) {
@@ -628,18 +629,18 @@ public final class UIHelper {
     }
 
     public static void setContext(ContextMenu context) {
-        if (Minecraft.getInstance().screen instanceof AbstractPanelScreen panelScreen)
+        if (Minecraft.getInstance().gui.screen() instanceof AbstractPanelScreen panelScreen)
             panelScreen.contextMenu = context;
     }
 
     public static ContextMenu getContext() {
-        if (Minecraft.getInstance().screen instanceof AbstractPanelScreen panelScreen)
+        if (Minecraft.getInstance().gui.screen() instanceof AbstractPanelScreen panelScreen)
             return panelScreen.contextMenu;
         return null;
     }
 
     public static void setTooltip(Component text) {
-        if (Minecraft.getInstance().screen instanceof AbstractPanelScreen panelScreen)
+        if (Minecraft.getInstance().gui.screen() instanceof AbstractPanelScreen panelScreen)
             panelScreen.tooltip = text;
     }
 

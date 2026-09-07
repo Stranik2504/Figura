@@ -1,6 +1,6 @@
 package org.figuramc.figura.ducks;
 
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import org.apache.commons.lang3.function.TriFunction;
 import org.figuramc.figura.avatar.Avatar;
@@ -15,7 +15,7 @@ interface QuadFunction<A, B, C, D, R> {
 }
 
 public interface NodeCollectorExtension {
-    <S extends EntityRenderState> void submitFiguraModel(Avatar avatar, S renderState, TriFunction<Avatar, S, MultiBufferSource, Void> renderer);
+    <S extends EntityRenderState> void submitFiguraModel(Avatar avatar, S renderState, TriFunction<Avatar, S, VertexConsumer, Void> renderer);
 
     List<FiguraSubmission> getFiguraSubmissions();
 }

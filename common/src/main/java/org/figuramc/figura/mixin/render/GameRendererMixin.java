@@ -93,7 +93,7 @@ public abstract class GameRendererMixin implements GameRendererAccessor {
             if (this.postEffectId == null || !this.postEffectId.equals(resource)) {
                 PostChain postchain = this.minecraft.getShaderManager().getPostChain(resource, LevelTargetBundle.MAIN_TARGETS);
                 if (postchain != null)
-                    postchain.process(this.minecraft.getMainRenderTarget(), this.resourcePool);
+                    postchain.process(this.minecraft.gameRenderer.mainRenderTarget(), this.resourcePool);
             }
         } catch (Exception ignored) {
             this.effectActive = false;

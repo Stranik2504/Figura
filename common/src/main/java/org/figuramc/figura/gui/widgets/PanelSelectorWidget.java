@@ -84,7 +84,7 @@ public class PanelSelectorWidget extends AbstractContainerElement {
 
     private void createPanelButton(Screen panel, PanelIcon icon, boolean toggled, int x, int width) {
         // create button
-        PanelButton button = new PanelButton(x, getY(), width, getHeight() - 4, panel.getTitle(), icon, this, bx -> Minecraft.getInstance().setScreen(panel));
+        PanelButton button = new PanelButton(x, getY(), width, getHeight() - 4, panel.getTitle(), icon, this, bx -> Minecraft.getInstance().gui.setScreen(panel));
         button.shouldHaveBackground(false);
         if (toggled) this.selected = button;
 

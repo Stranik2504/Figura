@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.renderer.PlayerSkinRenderCache;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.PlayerHeadSpecialRenderer;
 import net.minecraft.core.component.DataComponents;

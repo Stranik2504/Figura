@@ -69,9 +69,9 @@ public class EntityPreview extends AbstractContainerElement {
                 FiguraText.of("gui.expand"),
                 bx -> {
                     if (button.isToggled()) {
-                        Minecraft.getInstance().setScreen(new AvatarScreen(scale, pitch, yaw, this.entity, parentScreen));
+                        Minecraft.getInstance().gui.setScreen(new AvatarScreen(scale, pitch, yaw, this.entity, parentScreen));
                     } else {
-                        Minecraft.getInstance().setScreen(parentScreen);
+                        Minecraft.getInstance().gui.setScreen(parentScreen);
                     }
                 }));
     }

@@ -1,6 +1,7 @@
 package org.figuramc.figura.utils;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -157,7 +158,7 @@ public class RenderUtils {
     static final ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
     public static void renderStatic(LivingEntity entity, ItemStack item, ItemDisplayContext displayMode, PoseStack poseStack, int newLight, int newOverlay) {
         Minecraft client = Minecraft.getInstance();
-        FeatureRenderDispatcher featureRenderDispatcher = client.gameRenderer.getFeatureRenderDispatcher();
+        FeatureRenderDispatcher featureRenderDispatcher = client.gameRenderer.featureRenderDispatcher();
         SubmitNodeStorage submitNodeStorage = featureRenderDispatcher.getSubmitNodeStorage();
         if (entity != null)
             client.getItemModelResolver().updateForLiving(itemStackRenderState, item, displayMode, entity);
@@ -169,7 +170,7 @@ public class RenderUtils {
 
 
     static PoseStack dummyPoseStack = new PoseStack();
-    public static void createDummySubmission(BitSet selection, SubmitNodeCollector submitNodeStorage, BiFunction<MultiBufferSource, PoseStack, Boolean> preRender, Runnable postRender) {
+    public static void createDummySubmission(BitSet selection, SubmitNodeCollector submitNodeStorage, BiFunction<VertexConsumer, PoseStack, Boolean> preRender, Runnable postRender) {
         // otherwise something is very wrong and this will cause out of bounds exceptions and other bad things
         assert (selection.size() >= 3);
 

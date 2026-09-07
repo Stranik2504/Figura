@@ -26,7 +26,7 @@ import com.geckolib.constant.DataTickets;
 
 import java.util.Optional;
 
- @Pseudo
+@Pseudo
 @Mixin(value = GeoRenderer.class, remap = false)
 public interface GeckolibGeoRendererMixin<R extends GeoRenderState> {
     @Inject(method = "submitRenderTasks", at = @At("HEAD"), cancellable = true)

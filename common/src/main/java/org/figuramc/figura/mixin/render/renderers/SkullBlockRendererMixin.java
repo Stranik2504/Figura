@@ -87,7 +87,7 @@ public abstract class SkullBlockRendererMixin implements BlockEntityRenderer<Sku
 
             // render skull :3
             FiguraMod.popPushProfiler("render");
-            if (bool || localAvatar.skullRender(poseStack, bufferSource, light, null, 0f))
+            if (bool || localAvatar.skullRender(poseStack, light, null, 0f))
                 return false;
 
             FiguraMod.popProfiler(5);
