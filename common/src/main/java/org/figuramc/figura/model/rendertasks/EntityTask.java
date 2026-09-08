@@ -143,7 +143,7 @@ public class EntityTask extends RenderTask {
             }
 
             assert Minecraft.getInstance().level != null;
-            entity = EntityType.loadEntityRecursive(finalNbt, Minecraft.getInstance().level, EntitySpawnReason.SPAWN_ITEM_USE, EntityProcessor.NOP);
+            entity = EntityType.loadEntityRecursive(finalNbt, Minecraft.getInstance().level, new EntitySpawnRequest(EntitySpawnReason.SPAWN_ITEM_USE, true), EntityProcessor.NOP);
             if (entity == null) {
                 throw new LuaError("Could not create entity");
             }

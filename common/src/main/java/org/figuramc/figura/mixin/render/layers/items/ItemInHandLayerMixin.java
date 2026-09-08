@@ -90,7 +90,7 @@ public abstract class ItemInHandLayerMixin<S extends ArmedEntityRenderState, M e
     }
 
     @WrapOperation(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"))
-    private void figuraItemEvent(ItemStackRenderState instance, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, int outlineColor, Operation<Void> original, @Local(argsOnly = true, name = "state") S armedState) {
+    private void figuraItemEvent(ItemStackRenderState instance, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, int outlineColor, Operation<Void> original, @Local(argsOnly = true) S armedState) {
         ItemStack stack = ((FiguraItemStackRenderStateExtension)instance).figura$getItemStack();
         Entity entity = AvatarManager.getEntity(armedState);
         if (av != null && stack != null && entity != null && stack.getItem() instanceof BlockItem bl && bl.getBlock() instanceof AbstractSkullBlock sk) {

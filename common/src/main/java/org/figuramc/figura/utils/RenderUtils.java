@@ -151,7 +151,7 @@ public class RenderUtils {
     }
 
     static final ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
-    public static void renderStatic(LivingEntity entity, ItemStack item, ItemDisplayContext displayMode, PoseStack poseStack, int newLight, int newOverlay) {
+    public static void renderStatic(LivingEntity entity, ItemStack item, ItemDisplayContext displayMode, PoseStack poseStack, SubmitNodeCollector collector, int newLight, int newOverlay) {
         Minecraft client = Minecraft.getInstance();
 
         if (entity != null)
@@ -159,7 +159,7 @@ public class RenderUtils {
         else
             client.getItemModelResolver().updateForTopItem(itemStackRenderState, item, displayMode, client.level, null, 0);
 
-        itemStackRenderState.submit(poseStack, storage, newLight, newOverlay, 0);
+        itemStackRenderState.submit(poseStack, collector, newLight, newOverlay, 0);
     }
 
 

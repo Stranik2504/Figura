@@ -195,16 +195,21 @@ public class ImmediateFiguraRenderer extends FiguraRenderer {
 
             // push vertices to vertex consumer
             FiguraMod.pushProfiler("draw");
-            var submission = new FiguraSubmission(
-                Map.copyOf(vertexBuffer.primaryBuffers),
-                Map.copyOf(vertexBuffer.secondaryBuffers),
-                List.copyOf(queuedRenderTasks),
-                List.copyOf(queuedPivotBoxes),
-                    outlineColor
-            );
-
-            this.lastSubmission = submission;
-            FiguraSubmitUtils.submit(currentSubmitNodeCollector, submission);
+            if (currentSubmitNodeCollector != null) {
+                FiguraSubmission submission = new FiguraSubmission(
+                        Map.copyOf(vertexBuffer.primaryBuffers), Map.copyOf(vertexBuffer.secondaryBuffers),
+                        List.copyOf(queuedRenderTasks), List.copyOf(queuedPivotBoxes), outlineColor
+                );
+                this.lastSubmission = submission;
+                FiguraSubmitUtils.submit(currentSubmitNodeCollector, submission);
+            } else if (currentVertexConsumerProvider != null) {
+                // немедленный режим — пишем вершины прямо сейчас
+                FiguraSubmitUtils.drawImmediate(currentVertexConsumerProvider, vertexBuffer.primaryBuffers);
+                FiguraSubmitUtils.drawImmediate(currentVertexConsumerProvider, vertexBuffer.secondaryBuffers);
+                for (var qt : queuedRenderTasks)
+                    qt.task().render(qt.poseStack(), currentVertexConsumerProvider, qt.light(), qt.overlay());
+                // pivot-боксы в этом режиме, скорее всего, не нужны (debug-фича) — пропускаем
+            }
             FiguraMod.popProfiler();
 
             // finish rendering

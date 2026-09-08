@@ -33,7 +33,7 @@ public class ScreenEffectRendererMixin {
         }
     }
 
-    @ModifyVariable(method = "submitFire", at = @At("HEAD"), argsOnly = true, name = "sprite")
+    @ModifyVariable(method = "submitFire", at = @At("HEAD"), argsOnly = true, index = 2)
     private static TextureAtlasSprite secondFireTexture(TextureAtlasSprite sprite) {
         TextureAtlasSprite s = RenderUtils.secondFireLayer(avatar);
         avatar = null;

@@ -111,7 +111,7 @@ public abstract class GameRendererMixin implements GameRendererAccessor {
         return cameraRenderState;
     }
 
-    @ModifyArg(method = "<init>", index = 4,
+    @ModifyArg(method = "<init>", index = 2,
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/render/GuiRenderer;<init>(Lnet/minecraft/client/renderer/state/gui/GuiRenderState;Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;Ljava/util/List;)V"))
     private List<PictureInPictureRenderer<?>> addPortraitRenderer(List<PictureInPictureRenderer<?>> list) {

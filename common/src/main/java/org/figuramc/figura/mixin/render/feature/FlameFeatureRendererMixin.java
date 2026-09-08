@@ -21,13 +21,13 @@ public class FlameFeatureRendererMixin {
     @Unique
     Avatar figura$avatar = null;
 
-    @ModifyVariable(method = "prepare", at = @At("STORE"), name = "fire1", argsOnly = true)
+    @ModifyVariable(method = "prepare", at = @At("HEAD"), index = 3, argsOnly = true)
     private TextureAtlasSprite firstFireTexture(TextureAtlasSprite fire1) {
         TextureAtlasSprite s = RenderUtils.firstFireLayer(figura$avatar);
         return s != null ? s : fire1;
     }
 
-    @ModifyVariable(method = "prepare", at = @At("STORE"), name = "fire2", argsOnly = true)
+    @ModifyVariable(method = "prepare", at = @At("HEAD"), index = 4, argsOnly = true)
     private TextureAtlasSprite secondFireTexture(TextureAtlasSprite fire2) {
         TextureAtlasSprite s = RenderUtils.secondFireLayer(figura$avatar);
         figura$avatar = null;

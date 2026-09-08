@@ -16,6 +16,7 @@ import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.math.matrix.FiguraMat3;
 import org.figuramc.figura.math.matrix.FiguraMat4;
 import org.figuramc.figura.model.FiguraModelPart;
+import org.figuramc.figura.model.FiguraVertexConsumerProvider;
 import org.figuramc.figura.model.ParentType;
 import org.figuramc.figura.model.VanillaModelData;
 import org.figuramc.figura.model.rendering.nodeRenderer.FiguraSubmission;
@@ -61,6 +62,7 @@ public abstract class FiguraRenderer {
     public FiguraSubmission lastSubmission;
     public SubmitNodeCollector currentSubmitNodeCollector;
     public int outlineColor = 0;
+    public FiguraVertexConsumerProvider currentVertexConsumerProvider;
     public VanillaModelData vanillaModelData = new VanillaModelData();
 
     public PartFilterScheme currentFilterScheme;
@@ -232,6 +234,20 @@ public abstract class FiguraRenderer {
     public void setupRenderer(PartFilterScheme currentFilterScheme, SubmitNodeCollector collector, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, int outlineColor, double camX, double camY, double camZ) {
         this.setupRenderer(currentFilterScheme, collector, tickDelta, light, alpha, overlay, translucent, glowing, outlineColor);
         this.setMatrices(camX, camY, camZ, matrices);
+    }
+
+    public void setupRenderer(PartFilterScheme currentFilterScheme, FiguraVertexConsumerProvider bufferProvider, PoseStack matrices, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing) {
+        this.currentFilterScheme = currentFilterScheme;
+        this.currentSubmitNodeCollector = null;
+        this.currentVertexConsumerProvider = bufferProvider;
+        this.outlineColor = 0;
+        this.tickDelta = tickDelta;
+        this.light = light;
+        this.alpha = alpha;
+        this.overlay = overlay;
+        this.translucent = translucent;
+        this.glowing = glowing;
+        this.setMatrices(matrices);
     }
 
     private void setupRenderer(PartFilterScheme currentFilterScheme, SubmitNodeCollector collector, float tickDelta, int light, float alpha, int overlay, boolean translucent, boolean glowing, int outlineColor) {

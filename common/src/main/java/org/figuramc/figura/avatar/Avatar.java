@@ -57,6 +57,7 @@ import org.figuramc.figura.math.matrix.FiguraMat4;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.mixin.gui.GuiGraphicsExtractorAccessor;
 import org.figuramc.figura.model.FiguraModelPart;
+import org.figuramc.figura.model.FiguraVertexConsumerProvider;
 import org.figuramc.figura.model.ParentType;
 import org.figuramc.figura.model.PartCustomization;
 import org.figuramc.figura.model.rendering.FiguraRenderer;
@@ -673,7 +674,7 @@ public class Avatar {
         FiguraMod.popProfiler(4);
     }
 
-    public void hudRender(PoseStack stack, SubmitNodeCollector collector, SubmitNodeCollector submitNodeCollector, Entity entity, float tickDelta) {
+    public void hudRender(PoseStack stack, SubmitNodeCollector collector, Entity entity, float tickDelta) {
         if (renderer == null || !loaded)
             return;
 
@@ -704,7 +705,7 @@ public class Avatar {
         FiguraMod.popProfiler(2);
     }
 
-    public boolean skullRender(PoseStack stack, SubmitNodeCollector collector, int light, Direction direction, float yaw) {
+    public boolean skullRender(PoseStack stack, FiguraVertexConsumerProvider bufferProvider, int light, Direction direction, float yaw) {
         if (renderer == null || !loaded || !renderer.interceptRendersIntoFigura)
             return false;
 
@@ -724,23 +725,23 @@ public class Avatar {
         renderer.allowPivotParts = false;
 
         renderer.setupRenderer(
-            PartFilterScheme.SKULL, collector, stack,
+            PartFilterScheme.SKULL, bufferProvider, stack,
             1f, light, 1f, OverlayTexture.NO_OVERLAY,
-            false, false, 0
+            false, false
         );
 
         int comp = renderer.renderSpecialParts();
         complexity.use(comp);
 
         // head
-        boolean bool = comp > 0 || headRender(stack, collector, light, true);
+        boolean bool = comp > 0 || headRender(stack, bufferProvider, light, true);
 
         renderer.allowPivotParts = true;
         stack.popPose();
         return bool;
     }
 
-    public boolean headRender(PoseStack stack, SubmitNodeCollector collector, int light, boolean useComplexity) {
+    public boolean headRender(PoseStack stack, FiguraVertexConsumerProvider bufferProvider, int light, boolean useComplexity) {
         if (renderer == null || !loaded)
             return false;
 
@@ -748,9 +749,9 @@ public class Avatar {
 
         // pre render
         renderer.setupRenderer(
-            PartFilterScheme.HEAD, collector, stack,
+            PartFilterScheme.HEAD, bufferProvider, stack,
             1f, light, 1f, OverlayTexture.NO_OVERLAY,
-            false, false, 0
+            false, false
         );
 
         renderer.allowHiddenTransforms = false;
@@ -763,6 +764,29 @@ public class Avatar {
             complexity.use(comp);
 
         // pos render
+        renderer.allowMatrixUpdate = oldMat;
+        renderer.allowHiddenTransforms = true;
+        renderer.ignoreVanillaVisibility = false;
+
+        return comp > 0 && luaRuntime != null && !luaRuntime.vanilla_model.HEAD.checkVisible();
+    }
+
+    public boolean headRender(PoseStack stack, SubmitNodeCollector collector, int light, boolean useComplexity) {
+        if (renderer == null || !loaded) return false;
+        boolean oldMat = renderer.allowMatrixUpdate;
+
+        renderer.setupRenderer(
+            PartFilterScheme.HEAD, collector, stack,
+            1f, light, 1f, OverlayTexture.NO_OVERLAY,
+            false, false, 0
+        );
+        renderer.allowHiddenTransforms = false;
+        renderer.allowMatrixUpdate = false;
+        renderer.ignoreVanillaVisibility = true;
+
+        int comp = renderer.render();
+        if (useComplexity) complexity.use(comp);
+
         renderer.allowMatrixUpdate = oldMat;
         renderer.allowHiddenTransforms = true;
         renderer.ignoreVanillaVisibility = false;
@@ -840,7 +864,7 @@ public class Avatar {
         return ret;
     }
 
-    public boolean renderArrow(PoseStack stack, SubmitNodeCollector collector, float delta, int light) {
+    public boolean renderArrow(PoseStack stack, FiguraVertexConsumerProvider bufferProvider, float delta, int light) {
         if (renderer == null || !loaded)
             return false;
 
@@ -851,9 +875,9 @@ public class Avatar {
         stack.mulPose(quaternionf);
 
         renderer.setupRenderer(
-            PartFilterScheme.ARROW, collector, stack,
+            PartFilterScheme.ARROW, bufferProvider, stack,
             delta, light, 1f, OverlayTexture.NO_OVERLAY,
-            false, false, 0
+            false, false
         );
 
         int comp = renderer.renderSpecialParts();
@@ -862,7 +886,7 @@ public class Avatar {
         return comp > 0;
     }
 
-    public boolean renderTrident(PoseStack stack, SubmitNodeCollector collector, float delta, int light) {
+    public boolean renderTrident(PoseStack stack, FiguraVertexConsumerProvider bufferProvider, float delta, int light) {
         if (renderer == null || !loaded)
             return false;
 
@@ -873,9 +897,9 @@ public class Avatar {
         stack.mulPose(quaternionf);
 
         renderer.setupRenderer(
-            PartFilterScheme.TRIDENT, collector, stack,
+            PartFilterScheme.TRIDENT, bufferProvider, stack,
             delta, light, 1f, OverlayTexture.NO_OVERLAY,
-            false, false, 0
+            false, false
         );
 
         int comp = renderer.renderSpecialParts();

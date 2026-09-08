@@ -54,12 +54,12 @@ public abstract class EntityRendererMixin<T extends Entity, S extends EntityRend
     }
 
 
-    @ModifyArg(method = FIGURA$SUBMIT_NAME_DISPLAY, at = @At(value = "INVOKE", target = FIGURA$SUBMIT_NAME_TAG, ordinal = 0), index = 7)
+    @ModifyArg(method = FIGURA$SUBMIT_NAME_DISPLAY, at = @At(value = "INVOKE", target = FIGURA$SUBMIT_NAME_TAG, ordinal = 0), index = 6)
     private CameraRenderState setAvatarForScoreSubmission(CameraRenderState cameraRenderState, @Local(argsOnly = true) EntityRenderState entityRenderState) {
         return figura$cameraStateForSubmission(cameraRenderState, entityRenderState, false);
     }
 
-    @ModifyArg(method = FIGURA$SUBMIT_NAME_DISPLAY, at = @At(value = "INVOKE", target = FIGURA$SUBMIT_NAME_TAG, ordinal = 1), index = 7)
+    @ModifyArg(method = FIGURA$SUBMIT_NAME_DISPLAY, at = @At(value = "INVOKE", target = FIGURA$SUBMIT_NAME_TAG, ordinal = 1), index = 6)
     private CameraRenderState setAvatarForNameSubmission(CameraRenderState cameraRenderState, @Local(argsOnly = true) EntityRenderState entityRenderState) {
         return figura$cameraStateForSubmission(cameraRenderState, entityRenderState, true);
     }

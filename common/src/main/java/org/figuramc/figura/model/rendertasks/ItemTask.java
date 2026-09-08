@@ -57,7 +57,7 @@ public class ItemTask extends RenderTask {
         int seed = entity != null ? entity.getId() + displayMode.ordinal() : 0;
         RenderUtils.renderStatic(
             entity, item, displayMode,
-            poseStack,
+            poseStack, collector,
             newLight, newOverlay
         );
     }

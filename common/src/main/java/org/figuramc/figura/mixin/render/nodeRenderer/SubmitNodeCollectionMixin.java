@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(SubmitNodeCollection.class)
 public class SubmitNodeCollectionMixin {
     @WrapOperation(method = "submitModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/SimpleFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/SubmitNode;)V"))
-    private <S> void figura$onSubmitModel(SimpleFeatureRenderPhase instance, SubmitNode submit, Operation<Void> original, @Local(argsOnly = true, name = "model") Model<? super S> model) {
+    private <S> void figura$onSubmitModel(SimpleFeatureRenderPhase instance, SubmitNode submit, Operation<Void> original, @Local(argsOnly = true) Model<? super S> model) {
         FiguraSubmitCallBackExtension modelSubmissionExtension = (FiguraSubmitCallBackExtension) submit;
         FiguraSubmitCallBackExtension modelExtension = (FiguraSubmitCallBackExtension) model;
 

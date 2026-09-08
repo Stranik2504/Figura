@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.font.TextRenderable;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.network.chat.Component;
 import org.figuramc.figura.FiguraMod;
@@ -80,17 +81,33 @@ public class TextTask extends RenderTask {
             vertexConsumer.addVertex(matrix, x2, -1f, vertexOffset).setColor(bg).setLight(l);
         }
 
+        Font.GlyphVisitor visitor = new Font.GlyphVisitor() {
+            @Override
+            public void acceptGlyph(TextRenderable.Styled glyph) {
+                VertexConsumer vc = buffer.getBuffer(glyph.renderType(displayMode));
+                glyph.render(matrix, vc, l, false);
+            }
+        };
+
         // text
         for (int i = 0, j = 0; i < text.size(); i++, j += (font.lineHeight + 1)) {
             Component text = this.text.get(i);
             int x = -alignment.apply(font, text);
 
             if (outline) {
-                font.drawInBatch8xOutline(text.getVisualOrderText(), x, j, -1, out, matrix, buffer, l);
-                if (seeThrough)
-                    font.drawInBatch(text, x, j, op, shadow, matrix, buffer, displayMode, 0, l);
+                Font.PreparedText outlinePrepared = font.prepare8xTextOutline(text.getVisualOrderText(), x, j, out);
+
+                outlinePrepared.visit(visitor);
+
+                if (seeThrough) {
+                    Font.PreparedText prepared = font.prepareText(text.getVisualOrderText(), x, j, op, shadow, false, 0);
+
+                    prepared.visit(visitor);
+                }
             } else {
-                font.drawInBatch(text, x, j, op, shadow, matrix, buffer, displayMode, 0, l);
+                Font.PreparedText prepared = font.prepareText(text.getVisualOrderText(), x, j, op, shadow, false, 0);
+
+                prepared.visit(visitor);
             }
         }
     }
