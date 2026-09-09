@@ -31,7 +31,7 @@ public class WardrobeScreen extends AbstractPanelScreen {
             .append(Component.literal("(This is some text you can hover)\n")
                     .withStyle(Style.EMPTY.withColor(0xFFF311A0).withHoverEvent(new HoverEvent.ShowText(Component.literal("hi chat")))))
             .append(Component.literal("(This is some text you can click on)\n")
-                    .withStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create("https://github.com/FiguraMC/Figura")))))
+                    .withStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create("https://github.com/Stranik2504/NoFigura")))))
             .append(Component.literal("(This is only visible in debug mode)")
                     .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
 
