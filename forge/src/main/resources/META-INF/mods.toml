@@ -1,8 +1,8 @@
 modLoader = "javafml"
 loaderVersion = "[53,)"
-issueTrackerURL = "https://github.com/FiguraMC/Figura/issues"
+issueTrackerURL = "https://github.com/Stranik2504/NoFigura/issues"
 license = "Polyform-Noncommercial-1.0.0"
-displayURL = "https://github.com/FiguraMC/Figura"
+displayURL = "https://github.com/Stranik2504/NoFigura"
 
 [[mods]]
 modId = "figura"

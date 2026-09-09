@@ -190,9 +190,9 @@ public class FiguraMod {
         Kofi("https://ko-fi.com/skyrina", ColorUtils.Colors.KOFI.style),
         OpenCollective("https://opencollective.com/figura", ColorUtils.Colors.KOFI.style),
         Discord("https://discord.figuramc.org/", ColorUtils.Colors.DISCORD.style),
-        Github("https://github.com/FiguraMC/Figura", ColorUtils.Colors.GITHUB.style),
-        Modrinth("https://modrinth.com/mod/figura", ColorUtils.Colors.MODRINTH.style),
-        Curseforge("https://www.curseforge.com/minecraft/mc-mods/figura", ColorUtils.Colors.CURSEFORGE.style),
+        Github("https://github.com/Stranik2504/NoFigura", ColorUtils.Colors.GITHUB.style),
+        Modrinth("https://modrinth.com/mod/nofigura", ColorUtils.Colors.MODRINTH.style),
+        Curseforge("https://www.curseforge.com/minecraft/mc-mods/nofigura", ColorUtils.Colors.CURSEFORGE.style),
         LuaManual("https://www.lua.org/manual/5.2/manual.html", ColorUtils.Colors.LUA_LOG.style);
 
         public final String url;
