@@ -1,6 +1,8 @@
 package org.figuramc.figura.mixin.fabric;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
@@ -10,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -21,6 +24,8 @@ import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.math.matrix.FiguraMat3;
 import org.figuramc.figura.mixin.render.PoseStackAccessor;
 import org.figuramc.figura.utils.RenderUtils;
+import org.joml.Matrix4fc;
+import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,15 +39,15 @@ public class LevelRendererMixinFabric {
     @Shadow @Final private SubmitNodeStorage submitNodeStorage;
     @Shadow @Final private FeatureRenderDispatcher featureRenderDispatcher;
 
-    @Inject(method = "lambda$addMainPass$0", at = @At("TAIL"))
-    private void renderLevelFirstPerson(CallbackInfo ci, @Local LevelRenderState levelRenderState) {
+    @Inject(method = "render", at = @At("RETURN"))
+    private void renderLevelFirstPerson(GraphicsResourceAllocator resourceAllocator, DeltaTracker deltaTracker, boolean renderOutline, CameraRenderState cameraState, Matrix4fc modelViewMatrix, GpuBufferSlice terrainFog, Vector4f fogColor, boolean shouldRenderSky, CallbackInfo ci) {
         Minecraft minecraft = Minecraft.getInstance();
         Camera camera = minecraft.gameRenderer.mainCamera();
-        DeltaTracker deltaTracker = minecraft.getDeltaTracker();
+        DeltaTracker dt = minecraft.getDeltaTracker();
         if (camera.isDetached())
             return;
 
-        float tickDelta = deltaTracker.getGameTimeDeltaPartialTick(false);
+        float tickDelta = dt.getGameTimeDeltaPartialTick(false);
         Entity e = camera.entity();
         Avatar avatar = AvatarManager.getAvatar(e);
 
@@ -62,7 +67,7 @@ public class LevelRendererMixinFabric {
                 (EntityRenderer<LivingEntity, LivingEntityRenderState>) this.entityRenderDispatcher.getRenderer(livingEntity);
 
         LivingEntityRenderState state = entityRenderer.createRenderState(livingEntity,
-                deltaTracker.getGameTimeDeltaPartialTick(minecraft.level.tickRateManager().isEntityFrozen(e)));
+                dt.getGameTimeDeltaPartialTick(minecraft.level.tickRateManager().isEntityFrozen(e)));
 
         avatar.firstPersonWorldRender(e, stack, this.submitNodeStorage, camera, tickDelta);
 
@@ -79,7 +84,7 @@ public class LevelRendererMixinFabric {
                     Mth.lerp(tickDelta, livingEntity.zOld, livingEntity.getZ()) - cam.z() + offset.z()
             );
 
-            entityRenderer.submit(state, stack, this.submitNodeStorage, levelRenderState.cameraRenderState);
+            entityRenderer.submit(state, stack, this.submitNodeStorage, cameraState);
             do {
                 stack.popPose();
             } while (((PoseStackAccessor) stack).getLastIndex() > lastIndex);

@@ -48,7 +48,7 @@ Help translate Figura to your native language on [Weblate](https://translate.fig
 
 ## Social: [ ![discord] ](https://discord.figuramc.org/) [ ![website] ](https://figuramc.org/)
 
-## Download: [ ![modrinth] ](https://modrinth.com/mod/figura) [ ![curseforge] ](https://curseforge.com/minecraft/mc-mods/figura) [ ![github] ](https://github.com/FiguraMC/Figura/releases/latest)
+## Download: [ ![modrinth] ](https://modrinth.com/mod/nofigura) [ ![curseforge] ](https://curseforge.com/minecraft/mc-mods/nofigura)
 
 ## Donate: [ ![collective] ](https://opencollective.com/figura) [ ![kofi] ](https://ko-fi.com/skyrina)
 

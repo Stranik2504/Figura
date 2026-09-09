@@ -73,8 +73,6 @@ public abstract class LevelRendererMixin {
                 entityRenderDispatcher.getPackedLightCoords(entity, tickDelta), tickDelta, EntityRenderMode.WORLD, outlineColor);
 
         FiguraMod.popProfiler(3);
-
-        FiguraSubmitUtils.submit(submitNodeCollector, av.renderer.lastSubmission);
     }
 
     // TODO: Neo does not boot, complains method must be static but it won't compile if it is, the hell?

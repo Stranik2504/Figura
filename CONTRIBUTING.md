@@ -12,7 +12,7 @@ Note - do not merge upstream into your pr branch if a clean rebase is possible.
    
     OR:
 
-   Ensure what you are doing is actually a bug via the `👾丨bug-reports` channel in our [Discord](https://discord.figuramc.org/) or has the [Bug]([https://github.com/FiguraMC/Figura/issues](https://github.com/FiguraMC/Figura/issues?q=is%3Aissue+is%3Aopen+label%3Abug+)) tag in the Issues tab.
+   Ensure what you are doing is actually a bug via the `👾丨bug-reports` channel in our [Discord](https://discord.figuramc.org/) or has the [Bug]([https://github.com/Stranik2504/NoFigura/issues](https://github.com/Stranik2504/NoFigura/issues?q=is%3Aissue+is%3Aopen+label%3Abug+)) tag in the Issues tab.
 
 3. Communicate with developers and other contributors about what you are building and adding. This helps keep multiple people from working on the same thing alone.
 

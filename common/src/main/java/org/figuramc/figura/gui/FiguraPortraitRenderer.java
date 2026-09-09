@@ -106,9 +106,9 @@ public class FiguraPortraitRenderer extends PictureInPictureRenderer<FiguraPortr
 
         GpuDevice gpuDevice = RenderSystem.getDevice();
         if (entry.texture == null) {
-            entry.texture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " texture " + avatar.name, 12, GpuFormat.RGBA8_UNORM, i, j, 1, 1);
+            entry.texture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " texture " + avatar.name, 13, GpuFormat.RGBA8_UNORM, i, j, 1, 1);
             entry.textureView = gpuDevice.createTextureView(entry.texture);
-            entry.depthTexture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " depth texture " + avatar.name, 8, GpuFormat.D32_FLOAT, i, j, 1, 1);
+            entry.depthTexture = gpuDevice.createTexture(() -> "UI " + this.getTextureLabel() + " depth texture " + avatar.name, 9, GpuFormat.D32_FLOAT, i, j, 1, 1);
             entry.depthTextureView = gpuDevice.createTextureView(entry.depthTexture);
             entry.sampler = gpuDevice.createSampler(AddressMode.CLAMP_TO_EDGE, AddressMode.CLAMP_TO_EDGE, FilterMode.NEAREST, FilterMode.NEAREST, 1, OptionalDouble.empty());
         }
