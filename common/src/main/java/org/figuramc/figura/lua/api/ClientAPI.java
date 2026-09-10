@@ -232,7 +232,7 @@ public class ClientAPI {
 
     @LuaWhitelist
     @LuaMethodDoc("client.is_hud_enabled")
-    public static boolean isHudEnabled() { return !Minecraft.getInstance().gui.hud.isHidden(); } // TODO: Check is valid with !
+    public static boolean isHudEnabled() { return !Minecraft.getInstance().gui.hud.isHidden(); }
 
     @LuaWhitelist
     @LuaMethodDoc("client.is_debug_overlay_enabled")

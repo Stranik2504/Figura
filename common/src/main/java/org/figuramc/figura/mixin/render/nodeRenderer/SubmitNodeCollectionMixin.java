@@ -5,58 +5,81 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.feature.FlameFeatureRenderer;
-import net.minecraft.client.renderer.feature.ItemFeatureRenderer;
 import net.minecraft.client.renderer.feature.phase.SimpleFeatureRenderPhase;
+import net.minecraft.client.renderer.feature.phase.TranslucentFeatureRenderPhase;
 import net.minecraft.client.renderer.feature.submit.SubmitNode;
 import net.minecraft.client.renderer.SubmitNodeCollection;
+import net.minecraft.client.renderer.feature.submit.TranslucentSubmit;
+import net.minecraft.world.item.ItemDisplayContext;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.ducks.FlameSubmitExtension;
 import org.figuramc.figura.ducks.FiguraSubmitCallBackExtension;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(SubmitNodeCollection.class)
 public class SubmitNodeCollectionMixin {
-    @WrapOperation(method = "submitModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/SimpleFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/SubmitNode;)V"))
-    private <S> void figura$onSubmitModel(SimpleFeatureRenderPhase instance, SubmitNode submit, Operation<Void> original, @Local(argsOnly = true) Model<? super S> model) {
-        FiguraSubmitCallBackExtension modelSubmissionExtension = (FiguraSubmitCallBackExtension) submit;
-        FiguraSubmitCallBackExtension modelExtension = (FiguraSubmitCallBackExtension) model;
-
-        for (var callback : modelExtension.figura$getPreRenderingCallbacks()) {
-            modelSubmissionExtension.figura$addPreRenderingCallback(callback);
-        }
-
-        for (var callback : modelExtension.figura$getPostRenderingCallbacks()) {
-            modelSubmissionExtension.figura$addPostRenderingCallback(callback);
-        }
-
-        modelSubmissionExtension.figura$setPreventAnimSetup(modelExtension.figura$getPreventAnimSetup());
-        modelExtension.figura$setPreventAnimSetup(false);
-
-        modelExtension.figura$getPreRenderingCallbacks().clear();
-        modelExtension.figura$getPostRenderingCallbacks().clear();
+    @WrapOperation(method = "submitModel",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/TranslucentFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/TranslucentSubmit;)V"))
+    private <S> void figura$transferTranslucent(TranslucentFeatureRenderPhase instance, TranslucentSubmit submit, Operation<Void> original, @Local(argsOnly = true) Model<? super S> model) {
+        figura$transfer(model, submit);
+        original.call(instance, submit);
     }
 
-    @WrapOperation(method = "submitItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/ItemFeatureRenderer$Submit;hasTranslucency()Z", ordinal = 0))
-    private <E> boolean figura$onSubmitModelPart(ItemFeatureRenderer.Submit instance, Operation<Boolean> original) {
-        FiguraSubmitCallBackExtension itemSubmissionExtension = (FiguraSubmitCallBackExtension) (Object) instance;
-        FiguraSubmitCallBackExtension displayContextExtension = (FiguraSubmitCallBackExtension) (Object) instance.displayContext();
+    @WrapOperation(method = "submitModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/SimpleFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/SubmitNode;)V"))
+    private <S> void figura$onSubmitModel(SimpleFeatureRenderPhase instance, SubmitNode submit, Operation<Void> original, @Local(argsOnly = true) Model<? super S> model) {
+        figura$transfer(model, submit);
+        original.call(instance, submit);
+    }
 
-        for (var callback : displayContextExtension.figura$getPreRenderingCallbacks()) {
-            itemSubmissionExtension.figura$addPreRenderingCallback(callback);
-        }
+    @Unique
+    private void figura$transfer(Model<?> model, Object submitObj) {
+        FiguraSubmitCallBackExtension modelExt = (FiguraSubmitCallBackExtension) model;
+        FiguraSubmitCallBackExtension submitExt = (FiguraSubmitCallBackExtension) submitObj;
 
-        for (var callback : displayContextExtension.figura$getPostRenderingCallbacks()) {
-            itemSubmissionExtension.figura$addPostRenderingCallback(callback);
-        }
-        itemSubmissionExtension.figura$setPreventAnimSetup(displayContextExtension.figura$getPreventAnimSetup());
-        displayContextExtension.figura$setPreventAnimSetup(false);
+        for (var cb : modelExt.figura$getPreRenderingCallbacks())
+            submitExt.figura$addPreRenderingCallback(cb);
+        for (var cb : modelExt.figura$getPostRenderingCallbacks())
+            submitExt.figura$addPostRenderingCallback(cb);
 
-        displayContextExtension.figura$getPreRenderingCallbacks().clear();
-        displayContextExtension.figura$getPostRenderingCallbacks().clear();
+        submitExt.figura$setPreventAnimSetup(modelExt.figura$getPreventAnimSetup());
+        modelExt.figura$setPreventAnimSetup(false);
+        modelExt.figura$getPreRenderingCallbacks().clear();
+        modelExt.figura$getPostRenderingCallbacks().clear();
+    }
 
-        return original.call(instance);
+    @WrapOperation(method = "submitItem",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/SimpleFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/SubmitNode;)V"))
+    private void figura$onSubmitItemSimple(SimpleFeatureRenderPhase instance, SubmitNode submit, Operation<Void> original,
+                                           @Local(argsOnly = true) ItemDisplayContext displayContext) {
+        figura$transferItem(displayContext, submit);
+        original.call(instance, submit);
+    }
+
+    @WrapOperation(method = "submitItem",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/TranslucentFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/TranslucentSubmit;)V"))
+    private void figura$onSubmitItemTranslucent(TranslucentFeatureRenderPhase instance, TranslucentSubmit submit, Operation<Void> original,
+                                                @Local(argsOnly = true) ItemDisplayContext displayContext) {
+        figura$transferItem(displayContext, submit);
+        original.call(instance, submit);
+    }
+
+    @Unique
+    private void figura$transferItem(ItemDisplayContext displayContext, Object submitObj) {
+        FiguraSubmitCallBackExtension displayExt = (FiguraSubmitCallBackExtension) (Object) displayContext;
+        FiguraSubmitCallBackExtension submitExt = (FiguraSubmitCallBackExtension) submitObj;
+
+        for (var cb : displayExt.figura$getPreRenderingCallbacks())
+            submitExt.figura$addPreRenderingCallback(cb);
+        for (var cb : displayExt.figura$getPostRenderingCallbacks())
+            submitExt.figura$addPostRenderingCallback(cb);
+
+        submitExt.figura$setPreventAnimSetup(displayExt.figura$getPreventAnimSetup());
+        displayExt.figura$setPreventAnimSetup(false);
+        displayExt.figura$getPreRenderingCallbacks().clear();
+        displayExt.figura$getPostRenderingCallbacks().clear();
     }
 
     @WrapOperation(method = "submitFlame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/SimpleFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/SubmitNode;)V"))

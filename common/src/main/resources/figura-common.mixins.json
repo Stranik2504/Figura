@@ -108,6 +108,7 @@
     "render.model.PartPoseMixin",
     "render.nodeRenderer.ItemDisplayContextMixin",
     "render.nodeRenderer.SubmitNodeCollectionMixin",
+    "render.nodeRenderer.OrderedSubmitNodeCollectorMixin",
     "render.nodeRenderer.SubmitNodeStorage$FlameSubmitMixin",
     "render.nodeRenderer.SubmitNodeStorage$ItemSubmitMixin",
     "render.nodeRenderer.SubmitNodeStorage$ModelSubmitMixin",

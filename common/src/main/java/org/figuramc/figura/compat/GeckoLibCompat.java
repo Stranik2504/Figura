@@ -28,7 +28,6 @@ public class GeckoLibCompat {
         getGeoModelForArmor5 = GLRenderUtil5.getMethod("getGeckoLibArmorRenderer", ItemStack.class, EquipmentSlot.class);
 
         // Modern
-        // TODO: Check valid it and may be replace it
         GLRenderUtil = new ClassWrapper("software.bernie.geckolib.util.RenderUtil");
         getGeoModelForArmor = GLRenderUtil.getMethod("getGeoModelForArmor", ItemStack.class, EquipmentSlot.class, EquipmentClientInfo.LayerType.class);
 

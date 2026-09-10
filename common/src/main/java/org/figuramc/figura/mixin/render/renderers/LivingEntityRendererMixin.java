@@ -212,7 +212,6 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private void shouldShowName(T livingEntity, double d, CallbackInfoReturnable<Boolean> cir) {
         if (UIHelper.paperdoll)
             cir.setReturnValue(Configs.PREVIEW_NAMEPLATE.value);
-        // TODO: Check is valid without !
         else if (Minecraft.getInstance().gui.hud.isHidden() || livingEntity.getUUID().equals(PopupMenu.getEntityId()))
             cir.setReturnValue(false);
         else if (!AvatarManager.panic) {
