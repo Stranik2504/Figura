@@ -308,12 +308,13 @@ public class PermissionsScreen extends AbstractPanelScreen {
         permissionsList.updateList(pack);
 
         // reload avatar after change permission
-        try {
-            var playerUUID = UUID.fromString(pack.name);
-            AvatarManager.reloadAvatar(playerUUID);
-        }
-        catch (Exception e) {
-            FiguraMod.LOGGER.error("Failed to reload player model after change permission", e);
+        if (pack instanceof PermissionPack.PlayerPermissionPack) {
+            try {
+                var playerUUID = UUID.fromString(pack.name);
+                AvatarManager.reloadAvatar(playerUUID);
+            } catch (Exception e) {
+                FiguraMod.LOGGER.error("Failed to reload player model after change permission", e);
+            }
         }
     }
 }
