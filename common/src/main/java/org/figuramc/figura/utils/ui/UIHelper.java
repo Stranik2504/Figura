@@ -495,12 +495,7 @@ public final class UIHelper {
         color = adjustColor(color);
         outline = adjustColor(outline);
 
-        for (int ox = -1; ox <= 1; ox++) {
-            for (int oy = -1; oy <= 1; oy++) {
-                if (ox != 0 || oy != 0)
-                    gui.text(textRenderer, text, x + ox, y + oy, outline, false);
-            }
-        }
+        ((GuiGraphicsExtractorAccessor)gui).figura$getRenderState().addText(new OutlinedGuiTextRenderState(textRenderer, text.getVisualOrderText(), new Matrix3x2f(gui.pose()), x, y, color, outline, ((GuiGraphicsExtractorAccessor)gui).figura$getScissorStack().peek()));
 
         gui.text(textRenderer, text, x, y, color, false);
     }
@@ -655,5 +650,60 @@ public final class UIHelper {
     public static void useFiguraLighting() {
         setFiguraLighting();
         RenderSystem.setShaderLights(buffer.slice());
+    }
+
+    // This is purely the outline to match vanilla, a second regular text state is also required.
+    private static class OutlinedGuiTextRenderState extends GuiTextRenderState {
+        public OutlinedGuiTextRenderState(Font font, FormattedCharSequence formattedCharSequence, Matrix3x2f matrix3x2f, int x, int y, int color, int outlineColor, @Nullable ScreenRectangle screenRectangle) {
+            super(font, formattedCharSequence, matrix3x2f, x, y, color, 0, false, false, screenRectangle);
+            this.formattedCharSequence = formattedCharSequence;
+            this.outlineColor = outlineColor;
+        }
+
+        private final int outlineColor;
+        private final FormattedCharSequence formattedCharSequence;
+        private Font.PreparedText preparedText;
+        private ScreenRectangle bounds;
+
+        @Override
+        public Font.PreparedText ensurePrepared() {
+            if (this.preparedText == null) {
+                Font.PreparedTextBuilder preparedTextBuilder = font.new PreparedTextBuilder(0, 0, outlineColor, false, false);
+
+                for (int l = -1; l <= 1; l++) {
+                    for (int m = -1; m <= 1; m++) {
+                        if (l != 0 || m != 0) {
+                            float[] fs = new float[]{x};
+                            int n = l;
+                            int o = m;
+                            formattedCharSequence.accept((lx, style, mx) -> {
+                                boolean bl = style.isBold();
+                                GlyphSource fontSet = ((FontAccessor) font).figura$getFontSet(style.getFont());
+                                GlyphInfo glyphInfo = fontSet.getGlyph(mx).info();
+                                preparedTextBuilder.x = fs[0] + n * glyphInfo.getShadowOffset();
+                                preparedTextBuilder.y = y + o * glyphInfo.getShadowOffset();
+                                fs[0] += glyphInfo.getAdvance(bl);
+                                return preparedTextBuilder.accept(lx, style.withColor(outlineColor), mx);
+                            });
+                        }
+                    }
+                }
+
+                this.preparedText = preparedTextBuilder;
+                ScreenRectangle screenRectangle = this.preparedText.bounds();
+                if (screenRectangle != null) {
+                    screenRectangle = screenRectangle.transformMaxBounds(this.pose);
+                    this.bounds = this.scissor != null ? this.scissor.intersection(screenRectangle) : screenRectangle;
+                }
+            }
+            return preparedText;
+        }
+
+        @Nullable
+        @Override
+        public ScreenRectangle bounds() {
+            this.ensurePrepared();
+            return bounds;
+        }
     }
 }
