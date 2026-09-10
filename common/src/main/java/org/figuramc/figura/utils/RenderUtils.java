@@ -187,8 +187,16 @@ public class RenderUtils {
         }
 
         if (selection.get(3)) {
-            // TODO ITEM SUBMISSION
-            //  submitNodeStorage.submitItem(dummyStack, ItemDisplayContext.FIXED, 0, 0, 0, dummyArr, List.of(), RenderType.LINES, ItemStackRenderState.FoilType.NONE);
+            ItemDisplayContext dummyContext = ItemDisplayContext.FIXED;
+            ((FiguraSubmitCallBackExtension) (Object) dummyContext).figura$addPreRenderingCallback(preRender);
+            ((FiguraSubmitCallBackExtension) (Object) dummyContext).figura$addPostRenderingCallback(postRender);
+
+            submitNodeStorage.submitItem(
+                    dummyPoseStack, dummyContext,
+                    0, 0, 0,
+                    new int[0], java.util.List.of(),
+                    ItemStackRenderState.FoilType.NONE
+            );
         }
 
 
