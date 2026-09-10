@@ -114,7 +114,7 @@ public class FiguraPortraitRenderer extends PictureInPictureRenderer<FiguraPortr
         }
 
         gpuDevice.createCommandEncoder().clearColorAndDepthTextures(entry.texture, GuiRenderer.CLEAR_COLOR, entry.depthTexture, 0.0);
-        RenderSystem.setProjectionMatrix(this.avatarProjectionMatrixBuffer.getBuffer(new Matrix4f().setOrtho(0.0F, i, j, 0.0F, -1000.0F, 1000.0F)), ProjectionType.ORTHOGRAPHIC);
+        RenderSystem.setProjectionMatrix(this.avatarProjectionMatrixBuffer.getBuffer(new Matrix4f().setOrtho(0.0F, i, j, 0.0F, 1000.0F, -1000.0F)), ProjectionType.ORTHOGRAPHIC);
     }
 
     @Override
