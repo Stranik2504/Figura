@@ -141,6 +141,40 @@ public enum FiguraRenderTypes {
     }
 
     public static class FiguraRenderPipelines {
-        public static final RenderPipeline FIGURA_SOLID = RenderPipelines.ENTITY_SOLID;
+        public static final RenderPipeline FIGURA_SOLID = buildFiguraSolid();
+
+        private static RenderPipeline buildFiguraSolid() {
+            RenderPipeline base = RenderPipelines.ENTITY_SOLID;
+
+            RenderPipeline.Builder builder = RenderPipeline.builder()
+                    .withLocation(FiguraIdentifier.of("pipeline/solid"))
+                    .withVertexShader(base.getVertexShader())
+                    .withFragmentShader(base.getFragmentShader())
+                    .withVertexFormat(base.getVertexFormat(), base.getVertexFormatMode())
+                    .withPolygonMode(base.getPolygonMode())
+                    .withCull(base.isCull())
+                    .withColorTargetState(base.getColorTargetState());
+
+            if (base.getDepthStencilState() != null)
+                builder = builder.withDepthStencilState(base.getDepthStencilState());
+
+            for (String sampler : base.getSamplers()) {
+                builder = builder.withSampler(sampler);
+            }
+
+            for (var uniform : base.getUniforms()) {
+                if (uniform.textureFormat() != null) {
+                    builder = builder.withUniform(uniform.name(), uniform.type(), uniform.textureFormat());
+                } else {
+                    builder = builder.withUniform(uniform.name(), uniform.type());
+                }
+            }
+
+            for (var define : base.getShaderDefines().values().entrySet()) {
+                builder = builder.withShaderDefine(define.getKey(), Integer.parseInt(define.getValue()));
+            }
+
+            return builder.build();
+        }
     }
 }
