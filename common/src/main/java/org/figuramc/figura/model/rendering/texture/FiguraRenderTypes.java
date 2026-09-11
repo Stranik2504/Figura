@@ -4,12 +4,14 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.*;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
+import org.figuramc.figura.utils.FiguraIdentifier;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -128,6 +130,33 @@ public enum FiguraRenderTypes {
     }
 
     public static class FiguraRenderPipelines {
-        public static final RenderPipeline FIGURA_SOLID = RenderPipelines.ENTITY_SOLID;
+        public static final RenderPipeline FIGURA_SOLID = buildFiguraSolid();
+
+        private static RenderPipeline buildFiguraSolid() {
+            RenderPipeline base = RenderPipelines.ENTITY_SOLID;
+
+            RenderPipeline.Builder builder = RenderPipeline.builder()
+                    .withLocation(FiguraIdentifier.of("pipeline/solid"))
+                    .withVertexShader(base.getVertexShader())
+                    .withFragmentShader(base.getFragmentShader())
+                    .withPolygonMode(base.getPolygonMode())
+                    .withCull(base.isCull())
+                    .withPrimitiveTopology(base.getPrimitiveTopology());
+
+            if (base.getColorTargetState() != null)
+                builder = builder.withColorTargetState(base.getColorTargetState());
+
+            if (base.getDepthStencilState() != null)
+                builder.withDepthStencilState(base.getDepthStencilState());
+
+            VertexFormat[] bindings = base.getVertexFormatBindings();
+
+            for (int i = 0; i < bindings.length; i++) {
+                if (bindings[i] != null)
+                    builder.withVertexBinding(i, bindings[i]);
+            }
+
+            return builder.build();
+        }
     }
 }
