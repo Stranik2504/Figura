@@ -1,9 +1,9 @@
 package org.figuramc.figura.model.rendering.texture;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.systems.GpuDevice;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.device.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.renderpearl.api.textures.FilterMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.*;
@@ -22,7 +22,7 @@ public enum FiguraRenderTypes {
     CUTOUT_EMISSIVE_SOLID(resourceLocation -> FiguraRenderType.CUTOUT_EMISSIVE_SOLID.apply(resourceLocation, true)),
 
     TRANSLUCENT(RenderTypes::entityTranslucent),
-    TRANSLUCENT_CULL(RenderTypes::entityTranslucentCullItemTarget),
+    TRANSLUCENT_CULL(RenderTypes::entityTranslucentCull), // TODO: Check entityTranslucentCullItemTarget
 
     EMISSIVE(RenderTypes::eyes),
     EMISSIVE_SOLID(resourceLocation -> RenderTypes.beaconBeam(resourceLocation, false)),
@@ -33,7 +33,7 @@ public enum FiguraRenderTypes {
     TEXTURED_PORTAL(FiguraRenderType.TEXTURED_PORTAL),
 
     GLINT(t -> RenderTypes.entityGlint(), false, false),
-    GLINT2(t -> RenderTypes.glint(), false, false),
+    GLINT2(t -> RenderTypes.glint(), false, false), // TODO: Make it one: entitySolidGlint???
     TEXTURED_GLINT(FiguraRenderType.TEXTURED_GLINT, true, false),
 
     LINES(t -> RenderTypes.lines(), false),

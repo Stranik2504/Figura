@@ -1,6 +1,6 @@
 package org.figuramc.figura.gui;
 
-import com.mojang.blaze3d.opengl.GlStateManager;
+import com.mojang.renderpearl.backend.opengl.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
