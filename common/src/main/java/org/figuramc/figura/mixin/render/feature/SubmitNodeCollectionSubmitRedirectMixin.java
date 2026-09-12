@@ -2,16 +2,13 @@ package org.figuramc.figura.mixin.render.feature;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.SubmitNodeCollection;
-import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
-import net.minecraft.client.renderer.feature.phase.SimpleFeatureRenderPhase;
+import net.minecraft.client.renderer.feature.TextFeatureRenderer;
 import net.minecraft.client.renderer.feature.phase.TranslucentFeatureRenderPhase;
-import net.minecraft.client.renderer.feature.submit.SubmitNode;
 import net.minecraft.client.renderer.feature.submit.TranslucentSubmit;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
@@ -21,7 +18,6 @@ import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.config.Configs;
 import org.figuramc.figura.ducks.CameraRenderStateExtension;
-import org.figuramc.figura.ducks.NameTagSubmitExtension;
 import org.figuramc.figura.lua.api.nameplate.EntityNameplateCustomization;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.permissions.Permissions;
@@ -34,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @Mixin(SubmitNodeCollection.class)
 public class SubmitNodeCollectionSubmitRedirectMixin {
@@ -86,7 +83,7 @@ public class SubmitNodeCollectionSubmitRedirectMixin {
 
     // Push position transformations after the nametag has been rotated to face the camera
     @Inject(method = "submitNameTag",
-            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V", shift = At.Shift.AFTER))
+            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;rotate(Lorg/joml/Quaternionfc;)V", shift = At.Shift.AFTER))
     private void figura$modifyPos(PoseStack poseStack, Vec3 nameTagAttachment, int offset, Component name, boolean seeThrough, int lightCoords, CameraRenderState camera, CallbackInfo ci) {
         if (figura$enabled && figura$hasCustomNameplate && figura$custom.getPos() != null) {
             FiguraMod.popPushProfiler("position");
@@ -108,7 +105,7 @@ public class SubmitNodeCollectionSubmitRedirectMixin {
         original.call(instance, (float) scaleVec.x, (float) scaleVec.y, (float) scaleVec.z);
     }
 
-    @Inject(method = "submitNameTag",
+    /*@Inject(method = "submitNameTag",
             at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack$Pose;pose()Lorg/joml/Matrix4f;"))
     private void setShadowMatrix(PoseStack poseStack, Vec3 nameTagAttachment, int offset, Component name, boolean seeThrough, int lightCoords, CameraRenderState camera, CallbackInfo ci, @Share("textMatrix") LocalRef<Matrix4f> textMatrix) {
         if (!figura$enabled || figura$avatar == null || !figura$hasCustomNameplate || !figura$custom.shadow)
@@ -124,44 +121,50 @@ public class SubmitNodeCollectionSubmitRedirectMixin {
     }
 
     @WrapOperation(method = "submitNameTag",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/SimpleFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/SubmitNode;)V"))
-    private void figura$redirectSimple(SimpleFeatureRenderPhase instance, SubmitNode submit, Operation<Void> original,
-                                       PoseStack poseStack, Vec3 nameTagAttachment, int offset, Component name,
-                                       boolean seeThrough, int lightCoords, CameraRenderState camera) {
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollection;submitNameTagPart(Lnet/minecraft/client/renderer/feature/TextFeatureRenderer$Submit;)V"))
+    private void figura$redirectSimple(SubmitNodeCollection instance, TextFeatureRenderer.Submit nameTag, Operation<Void> original) {
         figura$handle(instance, null, submit, original, camera);
     }
 
     @WrapOperation(method = "submitNameTag",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/TranslucentFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/TranslucentSubmit;)V"))
     private void figura$redirectTranslucent(TranslucentFeatureRenderPhase instance, TranslucentSubmit submit, Operation<Void> original,
-                                            PoseStack poseStack, Vec3 nameTagAttachment, int offset, Component name,
-                                            boolean seeThrough, int lightCoords, CameraRenderState camera) {
+                                            @Local(argsOnly = true) Component name) {
         figura$handle(null, instance, submit, original, camera);
+    }*/
+
+    @WrapOperation(method = "submitNameTag",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollection;submitNameTagPart(Lnet/minecraft/client/renderer/feature/TextFeatureRenderer$Submit;)V"))
+    private void figura$redirectSolid(SubmitNodeCollection instance, TextFeatureRenderer.Submit submit, Operation<Void> original,
+                                      @Local(argsOnly = true) Component name) {
+        figura$handle(submit, name, s -> original.call(instance, s));
     }
 
-    private void figura$handle(SimpleFeatureRenderPhase simplePhase, TranslucentFeatureRenderPhase translucentPhase,
-                               Object submitObj, Operation<Void> original, CameraRenderState camera) {
-        NameTagFeatureRenderer.Submit submit = (NameTagFeatureRenderer.Submit) submitObj;
+    // see-through ветка — перехватываем прямой вызов seeThrough.submit(...)
+    @WrapOperation(method = "submitNameTag",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/phase/TranslucentFeatureRenderPhase;submit(Lnet/minecraft/client/renderer/feature/submit/TranslucentSubmit;)V"))
+    private void figura$redirectSeeThrough(TranslucentFeatureRenderPhase instance, TranslucentSubmit submit, Operation<Void> original,
+                                           @Local(argsOnly = true) Component name) {
+        figura$handle((TextFeatureRenderer.Submit) submit, name, s -> original.call(instance, s));
+    }
 
-        org.figuramc.figura.ducks.CameraRenderStateExtension camExt = (org.figuramc.figura.ducks.CameraRenderStateExtension) camera;
-        Avatar avatar = camExt.figura$getAvatar();
-
-        EntityNameplateCustomization custom = (avatar != null && avatar.luaRuntime != null) ? avatar.luaRuntime.nameplate.ENTITY : null;
-        boolean hasCustom = custom != null && avatar.permissions.get(org.figuramc.figura.permissions.Permissions.NAMEPLATE_EDIT) == 1;
-        boolean enabled = org.figuramc.figura.config.Configs.ENTITY_NAMEPLATE.value > 0
-                && !org.figuramc.figura.avatar.AvatarManager.panic && hasCustom;
-
-        if (!enabled) {
-            figura$callOriginal(simplePhase, translucentPhase, submit, original);
+    private void figura$handle(TextFeatureRenderer.Submit submit, Component originalName, Consumer<TextFeatureRenderer.Submit> submitFn) {
+        if (!figura$enabled) {
+            submitFn.accept(submit);
             return;
         }
 
-        Font font = Minecraft.getInstance().font;
-        int light = custom.light != null ? custom.light : submit.lightCoords();
-        int backgroundColor = custom.background != null ? custom.background : submit.backgroundColor();
-        boolean deadmau = submit.text().getString().equals("deadmau5");
+        TextFeatureRenderer.Content.Text content = (TextFeatureRenderer.Content.Text) submit.content();
 
-        List<Component> lines = TextUtils.splitText(submit.text(), "\n");
+        Font font = Minecraft.getInstance().font;
+        int light = figura$custom.light != null ? figura$custom.light : submit.lightCoords();
+        int backgroundColor = figura$custom.background != null ? figura$custom.background : content.backgroundColor();
+        int outlineColor = content.outlineColor();
+        if (figura$custom.outline)
+            outlineColor = figura$custom.outlineColor != null ? figura$custom.outlineColor : 0x202020;
+
+        boolean deadmau = originalName.getString().equals("deadmau5");
+        List<Component> lines = TextUtils.splitText(originalName, "\n");
 
         for (int i = 0; i < lines.size(); i++) {
             Component line = lines.get(i);
@@ -172,26 +175,11 @@ public class SubmitNodeCollectionSubmitRedirectMixin {
             float x = -font.width(line) / 2f;
             float y = (deadmau ? -10f : 0f) + (font.lineHeight + 1) * lineOffset;
 
-            NameTagFeatureRenderer.Submit lineSubmit = new NameTagFeatureRenderer.Submit(
-                    submit.pose(), x, y, line, light, submit.color(), backgroundColor, submit.displayMode());
+            TextFeatureRenderer.Content.Text lineContent = new TextFeatureRenderer.Content.Text(
+                    x, y, line.getVisualOrderText(), content.dropShadow(), content.color(), backgroundColor, outlineColor
+            );
 
-            // outline
-            if (custom.outline) {
-                int outlineColor = custom.outlineColor != null ? custom.outlineColor : 0x202020;
-                ((NameTagSubmitExtension) (Object) lineSubmit).figura$setOutline(true, outlineColor);
-            }
-
-            figura$callOriginal(simplePhase, translucentPhase, lineSubmit, original);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void figura$callOriginal(SimpleFeatureRenderPhase simplePhase, TranslucentFeatureRenderPhase translucentPhase,
-                                     NameTagFeatureRenderer.Submit submit, Operation<Void> original) {
-        if (simplePhase != null) {
-            ((Operation<Void>) original).call(simplePhase, submit);
-        } else {
-            ((Operation<Void>) original).call(translucentPhase, submit);
+            submitFn.accept(new TextFeatureRenderer.Submit(submit.pose(), submit.displayMode(), light, lineContent));
         }
     }
 }

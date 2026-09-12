@@ -169,7 +169,6 @@ public class RenderUtils {
         // otherwise something is very wrong and this will cause out of bounds exceptions and other bad things
         assert (selection.size() >= 3);
 
-
         AvatarRenderer<AbstractClientPlayer> avatarRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getPlayerRenderer(Minecraft.getInstance().player);
 
         if (selection.get(1)) {

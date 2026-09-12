@@ -93,7 +93,6 @@
     "render.feature.ItemFeatureRendererMixin",
     "render.feature.ModelFeatureRendererMixin",
     "render.feature.SubmitNodeCollectionSubmitRedirectMixin",
-    "render.feature.NameTagFeatureRenderer$SubmitMixin",
     "render.layers.CapeLayerMixin",
     "render.layers.CustomHeadLayerMixin",
     "render.layers.EquipmentLayerRendererAccessor",

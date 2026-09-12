@@ -52,6 +52,11 @@ public class ConstantColorVertexConsumer implements VertexConsumer {
     }
 
     @Override
+    public @NonNull VertexConsumer setUv3(float u, float v) {
+        return delegate.setUv3(u, v);
+    }
+
+    @Override
     public @NonNull VertexConsumer setNormal(float x, float y, float z) {
         return delegate.setNormal(x, y, z);
     }
@@ -89,6 +94,11 @@ public class ConstantColorVertexConsumer implements VertexConsumer {
     @Override
     public void putBakedQuad(PoseStack.Pose pose, BakedQuad quad, QuadInstance instance) {
         delegate.putBakedQuad(pose, quad, instance);
+    }
+
+    @Override
+    public void putBakedQuadWithGlint(PoseStack.Pose pose, BakedQuad quad, QuadInstance instance, PoseStack.Pose sheetedDecalPose) {
+        delegate.putBakedQuadWithGlint(pose, quad, instance, sheetedDecalPose);
     }
 
     @Override

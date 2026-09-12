@@ -148,7 +148,7 @@ public interface GeckolibGeoRendererMixin<R extends GeoRenderState> {
     @Unique
     default void figura$prepareArmorRender(PoseStack stack) {
         stack.scale(16, 16, 16);
-        stack.mulPose(Axis.XP.rotationDegrees(180f));
-        stack.mulPose(Axis.YP.rotationDegrees(180f));
+        stack.rotateDegrees(Axis.XP, 180f);
+        stack.rotateDegrees(Axis.YP, 180f);
     }
 }

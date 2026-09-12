@@ -28,15 +28,15 @@ public class IOUtils {
 
     public static boolean hasControlDown() {
         return Util.getPlatform() == Util.OS.OSX
-                ? InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 343)
-                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 347)
-                : InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 341)
-                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 345);
+                ? InputConstants.isKeyDown(343)
+                || InputConstants.isKeyDown(347)
+                : InputConstants.isKeyDown(341)
+                || InputConstants.isKeyDown(345);
     }
 
     public static boolean hasShiftDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 340)
-                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 344);
+        return InputConstants.isKeyDown(340)
+                || InputConstants.isKeyDown(344);
     }
 
     public static final String INVALID_FILENAME_REGEX = "CON|PRN|AUX|NUL|COM\\d|LPT\\d|[\\\\/:*?\"<>|\u0000]|\\.$";
