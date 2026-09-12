@@ -3,13 +3,16 @@ package org.figuramc.figura.model.rendering.texture;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.renderpearl.api.device.GpuDevice;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.renderpearl.api.pipeline.ShaderType;
 import com.mojang.renderpearl.api.textures.FilterMode;
+import com.mojang.renderpearl.api.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.*;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
+import org.figuramc.figura.utils.FiguraIdentifier;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -128,6 +131,54 @@ public enum FiguraRenderTypes {
     }
 
     public static class FiguraRenderPipelines {
-        public static final RenderPipeline FIGURA_SOLID = RenderPipelines.ENTITY_SOLID;
+        public static final RenderPipeline FIGURA_SOLID = buildFiguraSolid();
+
+        private static RenderPipeline buildFiguraSolid() {
+            RenderPipeline base = RenderPipelines.ENTITY_SOLID;
+
+            RenderPipeline.Builder builder = RenderPipeline.builder()
+                    .withLocation(FiguraIdentifier.of("pipeline/solid"))
+                    .withPolygonMode(base.getPolygonMode())
+                    .withCull(base.isCull())
+                    .withPushConstantSize(base.pushConstantSize())
+                    .withPrimitiveTopology(base.getPrimitiveTopology());
+
+            if (base.getDepthStencilState() != null)
+                builder.withDepthStencilState(base.getDepthStencilState());
+
+            for (var shader : base.getShaders().entrySet()) {
+                if (shader.getKey().equals(ShaderType.FRAGMENT))
+                    builder = builder.withFragmentShader(shader.getValue());
+
+                if (shader.getKey().equals(ShaderType.VERTEX))
+                    builder = builder.withVertexShader(shader.getValue());
+            }
+
+            var j = 0;
+
+            for (var color : base.getColorTargetStates()) {
+                builder = builder.withColorTargetState(j, color);
+                j++;
+            }
+
+            for (var define : base.getShaderDefines().values().entrySet()) {
+                builder = builder.withShaderDefine(define.getKey(), Integer.parseInt(define.getValue()));
+            }
+
+            for (var layoutGroup : base.getBindGroupLayouts()) {
+                builder = builder.withBindGroupLayout(layoutGroup);
+            }
+
+            var bindings = base.getVertexFormatBindings();
+
+            for (int i = 0; i < bindings.size(); i++) {
+                var vertexFormat = bindings.get(i);
+
+                if (vertexFormat != null)
+                    builder.withVertexBinding(i, vertexFormat);
+            }
+
+            return builder.build();
+        }
     }
 }
